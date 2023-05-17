@@ -66,6 +66,19 @@ client.on('interactionCreate', interaction => {
         const reason = interaction.options.getString('reason')
         client.commands.get('unban')(client, interaction, user, reason, check_permision)
     }
+
+    if (interaction.commandName === 'mute'){
+        const user = interaction.options.getUser('user')
+        const reason = interaction.options.getString('reason')
+        const time = interaction.options.getInteger('time')
+        client.commands.get('mute')(client, interaction, user, reason, time, check_permision)
+    }
+
+    if (interaction.commandName === 'unmute'){
+        const user = interaction.options.getUser('user')
+        const reason = interaction.options.getString('reason')
+        client.commands.get('unmute')(client, interaction, user, reason, check_permision)
+    }
 })
 
 /// =========== Communication ==========
