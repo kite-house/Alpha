@@ -23,6 +23,7 @@ module.exports = async (client, newRole, audit) => {
 
             ])
             .setFooter({
+                iconURL : client.user.avatarURL(client.user.avatar),
                 text: `ID Role: ${newRole.id}`
             })
             .setTimestamp()

@@ -5,13 +5,14 @@ const client = new Discord.Client({
     intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.GuildVoiceStates,
     Discord.GatewayIntentBits.MessageContent,
     Discord.GatewayIntentBits.GuildMembers,
     ]
 })
-
+const { EmbedBuilder } = require("@discordjs/builders");
 const {ds_member, ds_server, new_members, members} = require('./config.json')
-
+const talkedRecently = new Set();
 const db = require('./db')
 console.log('SYSTEM-INFO: DATABASE | STATUS: ACCEPT!')
 
@@ -19,6 +20,15 @@ check_permision = require('./check_permision')
 
 const loader = require('./loader')
 loader(client, process.env.SECRET_TOKEN_DISCORD)
+
+const { DisTube } = require('distube')
+
+client.DisTube = new DisTube(client, {
+    leaveOnStop: true,
+    emitNewSongOnly: true,
+    emitAddSongWhenCreatingQueue: false,
+    emitAddListWhenCreatingQueue: false,
+})
 
 // ================= Main Code ===================================
 
@@ -35,7 +45,26 @@ client.on('ready', () => {
 /// =========== Commands ===============
 
 client.on('interactionCreate', interaction => {
-    console.log(`INTERACTION-INFO: USER: ${interaction.user.id}| USED: ${interaction.commandName}`)
+    if (talkedRecently.has(interaction.user.id)) {
+        return interaction.reply(
+            {embeds : [new EmbedBuilder()
+                .setTitle(`Возникла ошибка!`)
+                .setColor(Discord.Colors.Red)
+                .setDescription(`Не спешите!`)
+                .setFooter({
+                    iconURL : client.user.avatarURL(client.user.avatar),
+                    text: client.user.username + " • " + interaction.member.voice.channel.name
+                })
+                .setTimestamp()
+            ],ephemeral: true    
+        })
+    } else {
+        talkedRecently.add(interaction.user.id);
+        setTimeout(() => {
+        talkedRecently.delete(interaction.user.id);
+        }, 5000);
+    }
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName}`)
     if (interaction.commandName === 'ping'){
         client.commands.get('ping')(client, interaction)
     }
@@ -79,7 +108,25 @@ client.on('interactionCreate', interaction => {
         const reason = interaction.options.getString('reason')
         client.commands.get('unmute')(client, interaction, user, reason, check_permision)
     }
+
+    if (interaction.commandName === 'play'){
+        const names = interaction.options.getString('names')
+        client.commands.get('play')(client, interaction, names, interaction.channel.id)
+    }
+
+    if (interaction.commandName === 'stop'){
+        client.commands.get('stop')(client, interaction, interaction.channel.id)
+    }
+
+    if (interaction.commandName === 'resume'){
+        client.commands.get('resume')(client, interaction, interaction.channel.id)
+    }
+
+    if (interaction.commandName === 'pause'){
+        client.commands.get('pause')(client, interaction, interaction.channel.id)
+    }
 })
+
 
 /// =========== Communication ==========
 

@@ -123,6 +123,7 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
                     }
                 ])
                 .setFooter({
+                    iconURL : client.user.avatarURL(client.user.avatar),
                     text : `ID User: ${oldMember.user.id}`
                 })
                 .setTimestamp()

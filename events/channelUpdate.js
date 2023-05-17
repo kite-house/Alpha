@@ -33,6 +33,7 @@ module.exports = async (client, upChannel, audit) => {
 
             ])
             .setFooter({
+                iconURL : client.user.avatarURL(client.user.avatar),
                 text: `ID Channel: ${upChannel.id}`
             })
             .setTimestamp()
