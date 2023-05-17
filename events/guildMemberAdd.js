@@ -2,8 +2,8 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 
 
-module.exports = (client,newUser, db, audit) => {
-    client.channels.cache.get(audit).send(
+module.exports = (client, newUser, db, config) => {
+    client.channels.cache.get(config.ds_member).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newUser.user.avatarURL(newUser.user.avatar) , name: `${newUser.user.username}#${newUser.user.discriminator}`})
             .setThumbnail(newUser.user.avatarURL(newUser.user.avatar))
@@ -13,7 +13,7 @@ module.exports = (client,newUser, db, audit) => {
             .setTimestamp()
         ]})
 
-    client.channels.cache.get("1105762254571446366").send(
+    client.channels.cache.get(config.new_members).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newUser.user.avatarURL(newUser.user.avatar) , name: `${newUser.user.username}#${newUser.user.discriminator}`})
             .setThumbnail(newUser.user.avatarURL(newUser.user.avatar))
@@ -21,7 +21,7 @@ module.exports = (client,newUser, db, audit) => {
             .setDescription(`${newUser} присоединился(-ась) к серверу!`)
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
-                text: `Всего пользователей: ${client.guilds.cache.get("1105726968260997120").memberCount}`
+                text: `Всего пользователей: ${client.guilds.cache.get(newUser.guild.id).memberCount}`
             })
             .setColor(Discord.Colors.DarkAqua)
             .setTimestamp()
@@ -52,8 +52,8 @@ module.exports = (client,newUser, db, audit) => {
     ]
 
     db.query(`INSERT INTO users(discord_id, username, nickname, avatar, role) VALUES (?)`, [NewUser], function(err, results) {
-        if(err) client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: FAIL!`);
-        client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ACCEPT!`)
+        if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ${err}`);
+        client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ACCEPT!`)
     })
 
 }

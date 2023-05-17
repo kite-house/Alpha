@@ -1,10 +1,10 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 
-module.exports = async (client, newRole, audit) => {
+module.exports = async (client, newRole, config) => {
     const AuditLogFetch = await newRole.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
-    client.channels.cache.get(audit).send(
+    client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newRole.guild.iconURL({Dynamic : true}) , name: newRole.guild.name})
             .setThumbnail(newRole.guild.iconURL({Dynamic : true}))

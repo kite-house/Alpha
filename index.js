@@ -1,4 +1,3 @@
-const fs = require('fs')
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client({
@@ -11,7 +10,8 @@ const client = new Discord.Client({
     ]
 })
 const { EmbedBuilder } = require("@discordjs/builders");
-const {ds_member, ds_server, new_members, members} = require('./config.json')
+const config = require('./config.json')
+
 const talkedRecently = new Set();
 const db = require('./db')
 console.log('SYSTEM-INFO: DATABASE | STATUS: ACCEPT!')
@@ -33,13 +33,13 @@ client.DisTube = new DisTube(client, {
 // ================= Main Code ===================================
 
 client.on('ready', () => {
-    client.commands.get('database_update')(client, interaction = 'System', db)
+    client.commands.get('database_update')(client, interaction = 'System', db, config)
     console.log('SYSTEM-INFO: DATABASE-MIGRATIONS | STATUS: ACCEPT!')
-    console.log("SYSTEM-INFO: START | STATUS: ACCEPT!")
     client.user.setPresence({
         activities: [{ name: `за тобой`, type: Discord.ActivityType.Watching }],
         status: 'dnd',
       });
+    console.log("SYSTEM-INFO: START | STATUS: ACCEPT!")
 })
 
 /// =========== Commands ===============
@@ -64,6 +64,7 @@ client.on('interactionCreate', interaction => {
         talkedRecently.delete(interaction.user.id);
         }, 5000);
     }
+
     console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName}`)
     if (interaction.commandName === 'ping'){
         client.commands.get('ping')(client, interaction)
@@ -75,7 +76,7 @@ client.on('interactionCreate', interaction => {
     }
 
     if (interaction.commandName === 'database_update'){
-        client.commands.get('database_update')(client, interaction, db)
+        client.commands.get('database_update')(client, interaction, db, config)
     }
 
     if (interaction.commandName === 'kick'){
@@ -111,19 +112,19 @@ client.on('interactionCreate', interaction => {
 
     if (interaction.commandName === 'play'){
         const names = interaction.options.getString('names')
-        client.commands.get('play')(client, interaction, names, interaction.channel.id)
+        client.commands.get('play')(client, interaction, names, config)
     }
 
     if (interaction.commandName === 'stop'){
-        client.commands.get('stop')(client, interaction, interaction.channel.id)
+        client.commands.get('stop')(client, interaction, config)
     }
 
     if (interaction.commandName === 'resume'){
-        client.commands.get('resume')(client, interaction, interaction.channel.id)
+        client.commands.get('resume')(client, interaction, config)
     }
 
     if (interaction.commandName === 'pause'){
-        client.commands.get('pause')(client, interaction, interaction.channel.id)
+        client.commands.get('pause')(client, interaction, config)
     }
 })
 
@@ -142,6 +143,7 @@ client.on('messageCreate', message => {
     if (message.content == 'привет'){
         message.reply('привет')
     }
+    // Пока не рабочий код
 })
 
 
@@ -149,20 +151,20 @@ client.on('messageCreate', message => {
 
 client.on('guildMemberUpdate', (oldMember,newMember) => {
     console.log(`MEMBER-INFO: USER: ${newMember.user.id} UPDATED`)
-    client.events.get('guildMemberUpdate')(client,oldMember, newMember,db, ds_member)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get("1105726968260997120").memberCount}`)
+    client.events.get('guildMemberUpdate')(client,oldMember, newMember, db, config)
+    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(newMember.guild.id).memberCount}`)
 })
 
 client.on('guildMemberAdd', newUser => {
     console.log(`MEMBER-INFO: USER: ${newUser.user.id} UPDATED`)
-    client.events.get('guildMemberAdd')(client,newUser,db, ds_member)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get("1105726968260997120").memberCount}`)
+    client.events.get('guildMemberAdd')(client, newUser, db, config)
+    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(newUser.guild.id).memberCount}`)
 })
 
 client.on('guildMemberRemove', oldUser => {
     console.log(`MEMBER-INFO: USER: ${oldUser.user.id} UPDATED`)
-    client.events.get('guildMemberRemove')(client,oldUser,db, ds_member)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get("1105726968260997120").memberCount}`)
+    client.events.get('guildMemberRemove')(client,oldUser, db, config)
+    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(oldUser.guild.id).memberCount}`)
 })
 
 
@@ -170,33 +172,33 @@ client.on('guildMemberRemove', oldUser => {
 
 client.on('channelCreate', newChannel => {
     console.log(`SERVER-INFO: CREATE NEW CHANNEL`)
-    client.events.get('channelCreate')(client, newChannel, ds_server)
+    client.events.get('channelCreate')(client, newChannel, config)
 })
 
 client.on('channelDelete', oldChannel => {
     console.log(`SERVER-INFO: DELETE CHANNEL`)
-    client.events.get("channelDelete")(client, oldChannel, ds_server)
+    client.events.get("channelDelete")(client, oldChannel, config)
 })
 
 client.on('channelUpdate', upChannel => {
-    if (upChannel.id == '1105727699147833394') return 
+    if (upChannel.id == config.members) return 
     console.log(`SERVER-INFO: UPDATE CHANNEL`)
-    client.events.get("channelUpdate")(client, upChannel, ds_server)
+    client.events.get("channelUpdate")(client, upChannel, config)
 })
 
 client.on('roleCreate', newRole => {
     console.log(`SERVER-INFO: CREATE NEW ROLE`)
-    client.events.get("roleCreate")(client, newRole, ds_server)
+    client.events.get("roleCreate")(client, newRole, config)
 })
 
 client.on('roleDelete', oldRole => {
     console.log(`SERVER-INFO: DELETE ROLE`)
-    client.events.get('roleDelete')(client, oldRole, ds_server)
+    client.events.get('roleDelete')(client, oldRole, config)
 })
 
 client.on('roleUpdate', upRole => {
     console.log(`SERVER-INFO: UPDATE ROLE`)
-    client.events.get("roleUpdate")(client, upRole, ds_server)
+    client.events.get("roleUpdate")(client, upRole, config)
 })
 
 

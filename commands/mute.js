@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = (client, interaction, user, reason, time ,check_permision) => {
+module.exports = (client, interaction, user, reason, time, check_permision) => {
     check_permision(client, interaction)
     if (reason == null){
         reason = 'не указана'

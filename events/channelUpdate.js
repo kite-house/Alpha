@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 
 
-module.exports = async (client, upChannel, audit) => {
+module.exports = async (client, upChannel, config) => {
     const AuditLogFetch = await upChannel.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
 
@@ -14,7 +14,7 @@ module.exports = async (client, upChannel, audit) => {
         typeChannel = 'голосовой'
     }
     
-    client.channels.cache.get(audit).send(
+    client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: upChannel.guild.iconURL({Dynamic : true}) , name: upChannel.guild.name})
             .setThumbnail(upChannel.guild.iconURL({Dynamic : true}))

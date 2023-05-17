@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 
-module.exports = async(client, oldMember, newMember, db, audit) => {
+module.exports = async(client, oldMember, newMember, db, config) => {
     const AuditLogFetch = await newMember.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
 
@@ -16,7 +16,7 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
     }
 
     if (oldMember.nickname != newMember.nickname){
-        client.channels.cache.get(audit).send(
+        client.channels.cache.get(config.ds_member).send(
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
                 .setThumbnail(newMember.user.avatarURL(newMember.user.avatar))
@@ -45,15 +45,15 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
                 .setTimestamp()
             ]})
         db.query(`UPDATE users SET nickname = '${newMember.nickname}' WHERE discord_id = '${oldMember.user.id}'`, function(err, results) {
-            if(err) client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: FAIL!`);
-            client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
+            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ${err}`);
+            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
         })
     }  
 
 /// ============================== Изменение USERNAME#TAG ======================================
 
     if (oldMember.user.username + '#' + oldMember.user.desriminator != newMember.user.username + "#" + newMember.user.desriminator){
-        client.channels.cache.get(audit).send(
+        client.channels.cache.get(config.ds_member).send(
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
                 .setThumbnail(newMember.user.avatarURL(newMember.user.avatar))
@@ -79,8 +79,8 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
             ]})
 
         db.query(`UPDATE users SET system_username = '${newMember.user.username + '#' + newMember.user.desriminator}' WHERE discord_id = '${oldMember.user.id}'`, function(err, results) {
-            if(err) client.channels.cache.get('1097079544869027880').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: FAIL!`);
-            client.channels.cache.get('1097079544869027880').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
+            if(err) client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ${err}`);
+            client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
 
         })
     }
@@ -89,8 +89,8 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
 
     if (oldMember.user.avatar != newMember.user.avatar){
         db.query(`UPDATE users SET avatar = '${newMember.user.avatar}' WHERE discord_id = '${oldMember.user.id}'`, function(err, results) {
-            if(err) client.channels.cache.get('1097079544869027880').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: FAIL!`);
-            client.channels.cache.get('1097079544869027880').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
+            if(err) client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ${err}`);
+            client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
         })
     }
 
@@ -108,7 +108,7 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
             text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
         }
         
-        client.channels.cache.get(audit).send(
+        client.channels.cache.get(config.ds_member).send(
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
                 .setThumbnail(newMember.user.avatarURL(newMember.user.avatar))
@@ -130,8 +130,8 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
             ]})
 
         db.query(`UPDATE users SET role = '${newMember_role}' WHERE discord_id = '${oldMember.user.id}'`, function(err, results) {
-            if(err) client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: FAIL!`);
-            client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
+            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ${err}`);
+            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newMember.nickname}, STATUS: ACCEPT!`)
         })
     }
 

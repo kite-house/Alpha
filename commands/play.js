@@ -2,9 +2,9 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = (client, interaction, names, channel) => {
+module.exports = (client, interaction, names, config) => {
 
-    if (channel != "1108219171814260816") return interaction.reply(
+    if (interaction.channel.id != config.DJ) return interaction.reply(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
             .setThumbnail(client.user.avatarURL(client.user.avatar))

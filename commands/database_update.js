@@ -1,8 +1,8 @@
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, db) => {
+module.exports = async (client, interaction, db, config) => {
     if (interaction != 'System'){
-        if(interaction.user.id != '343339732975091714') return interaction.reply({
+        if(interaction.user.id != interaction.guild.OwnerID) return interaction.reply({
             embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
                 .setThumbnail(client.user.avatarURL(client.user.avatar))
@@ -19,8 +19,6 @@ module.exports = async (client, interaction, db) => {
 
     db.query('DELETE FROM users WHERE 1')
     db.query('ALTER TABLE users AUTO_INCREMENT = 1')
-    
-    client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATIONS, STATUS: START!`)
     guild = client.guilds.cache.get("1105726968260997120")
     let res = await guild.members.fetch();
     res.forEach((member) => {
@@ -45,8 +43,8 @@ module.exports = async (client, interaction, db) => {
         ]
     
         db.query(`INSERT INTO users(discord_id, nickname, username, avatar, role) VALUES (?)`, [NewUser], function(err, results) {
-            if(err) client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ${err}!`)
-            client.channels.cache.get('1105738078443798588').send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ACCEPT!`)
+            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ${err}!`)
+            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ACCEPT!`)
         });
     });
 
