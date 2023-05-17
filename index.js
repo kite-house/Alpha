@@ -1,5 +1,13 @@
 require('dotenv').config()
 const Discord = require('discord.js')
+const { EmbedBuilder } = require("@discordjs/builders");
+const config = require('./config.json')
+const talkedRecently = new Set();
+const db = require('./db')
+const check_permision = require('./check_permision')
+const { DisTube } = require('distube')
+
+
 const client = new Discord.Client({
     intents: [
     Discord.GatewayIntentBits.Guilds,
@@ -9,19 +17,6 @@ const client = new Discord.Client({
     Discord.GatewayIntentBits.GuildMembers,
     ]
 })
-const { EmbedBuilder } = require("@discordjs/builders");
-const config = require('./config.json')
-
-const talkedRecently = new Set();
-const db = require('./db')
-console.log('SYSTEM-INFO: DATABASE | STATUS: ACCEPT!')
-
-check_permision = require('./check_permision')
-
-const loader = require('./loader')
-loader(client, process.env.SECRET_TOKEN_DISCORD)
-
-const { DisTube } = require('distube')
 
 client.DisTube = new DisTube(client, {
     leaveOnStop: true,
@@ -29,6 +24,8 @@ client.DisTube = new DisTube(client, {
     emitAddSongWhenCreatingQueue: false,
     emitAddListWhenCreatingQueue: false,
 })
+
+require('./loader')(client, process.env.SECRET_TOKEN_DISCORD)
 
 // ================= Main Code ===================================
 
@@ -206,6 +203,4 @@ client.on('roleUpdate', upRole => {
 /// ============================== AUTHORIZATION =====================================
 
 
-client.login(process.env.SECRET_TOKEN_DISCORD, (error) => {
-    client.users.cache.get('343339732975091714').send(`ERROR LOG: ${error}`)
-})
+client.login(process.env.SECRET_TOKEN_DISCORD)
