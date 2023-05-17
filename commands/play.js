@@ -54,7 +54,7 @@ module.exports = (client, interaction, names, channel) => {
                         inline: true
                     },
                     {
-                        name: 'Включил:',
+                        name: 'Включил',
                         value: `${interaction.user}`,
                         inline: true
                     }
@@ -62,7 +62,7 @@ module.exports = (client, interaction, names, channel) => {
                 ])
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username + " • " + interaction.member.voice.channel.name
+                    text: client.user.username + " • " + interaction.member.voice.channel
                 })
                 .setTimestamp()
             ]})
