@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, message) => {
+module.exports = async (client, interaction) => {
     let totalSeconds = (client.uptime / 1000);
     let days = Math.floor(totalSeconds / 86400);
     totalSeconds %= 86400;
@@ -11,13 +11,13 @@ module.exports = async (client, message) => {
     let minutes = Math.floor(totalSeconds / 60);
     let seconds = Math.floor(totalSeconds % 60);
 
-    await message.reply(
+    await interaction.reply(
         {embeds : [new EmbedBuilder()
         .setColor(Discord.Colors.White)
         .setFields(
         {
             name : 'Пинг бота',
-            value : `${Date.now() - message.createdTimestamp} мс`,
+            value : `${Date.now() - interaction.createdTimestamp} мс`,
             inline : true
         },
         {

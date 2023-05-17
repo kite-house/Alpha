@@ -15,6 +15,7 @@ const {ds_member, ds_server, new_members, members} = require('./config.json')
 const db = require('./db')
 console.log('SYSTEM-INFO: DATABASE | STATUS: ACCEPT!')
 
+check_permision = require('./check_permision')
 
 const loader = require('./loader')
 loader(client, process.env.SECRET_TOKEN_DISCORD)
@@ -41,11 +42,29 @@ client.on('interactionCreate', interaction => {
 
     if (interaction.commandName === 'clear'){
         const value = interaction.options.getInteger('value');
-        client.commands.get('clear')(client, interaction, value)
+        client.commands.get('clear')(client, interaction, value, check_permision)
     }
 
     if (interaction.commandName === 'database_update'){
         client.commands.get('database_update')(client, interaction, db)
+    }
+
+    if (interaction.commandName === 'kick'){
+        const user = interaction.options.getUser('user')
+        const reason = interaction.options.getString('reason')
+        client.commands.get('kick')(client, interaction, user, reason, check_permision)
+    }
+
+    if (interaction.commandName === 'ban'){
+        const user = interaction.options.getUser('user')
+        const reason = interaction.options.getString('reason')
+        client.commands.get('ban')(client, interaction, user, reason, check_permision)
+    }
+
+    if (interaction.commandName === 'unban'){
+        const user = interaction.options.getUser('user')
+        const reason = interaction.options.getString('reason')
+        client.commands.get('unban')(client, interaction, user, reason, check_permision)
     }
 })
 
