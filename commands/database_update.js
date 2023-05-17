@@ -55,9 +55,9 @@ module.exports = async (client, interaction, db) => {
 // ================== HELP ============================
 
 module.exports.help = {
-    name : 'migrations_full_database',
+    name : 'database_update',
     description : 'Полное копирование всех участников дискорда, создание таблицы базы данных!',
     data: new SlashCommandBuilder()
-    .setName("migrations_full_database")
+    .setName("database_update")
     .setDescription("Полное копирование всех участников дискорда, создание таблицы базы данных!")
 }

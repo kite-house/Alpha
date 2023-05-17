@@ -7,14 +7,21 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
 
 /// ============================== Изменение NICKNAME =========================================
 
+    if (oldMember.nickname === null){
+        oldMember.nickname = oldMember.user.username
+    }
+
+    if (newMember.nickname === null){
+        newMember.nickname = newMember.user.username
+    }
+
     if (oldMember.nickname != newMember.nickname){
         client.channels.cache.get(audit).send(
-            // (message.author.avatarURL(message.author.avatar))
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
                 .setThumbnail(newMember.user.avatarURL(newMember.user.avatar))
                 .setTitle(`Пользователь обновил свой профиль!`)
-                .setDescription(`Участник <@${oldMember.user.id}> изменил никнэйм`)
+                .setDescription(`Участник <@${oldMember.user.id}> изменил никнейм`)
                 .setColor(Discord.Colors.DarkBlue)
                 .setFields([
                     {
@@ -47,12 +54,11 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
 
     if (oldMember.user.username + '#' + oldMember.user.desriminator != newMember.user.username + "#" + newMember.user.desriminator){
         client.channels.cache.get(audit).send(
-            // (message.author.avatarURL(message.author.avatar))
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
                 .setThumbnail(newMember.user.avatarURL(newMember.user.avatar))
                 .setTitle(`Пользователь обновил свой профиль!`)
-                .setDescription(`Участник <@${oldMember.user.id}> изменил никнэйм`)
+                .setDescription(`Участник <@${oldMember.user.id}> изменил юзернейм`)
                 .setColor(Discord.Colors.DarkBlue)
                 .setFields([
                     {
@@ -90,14 +96,10 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
 
 /// ============================== Изменение ROLES ============================================
 
-    let oldMember_role = oldMember.roles.cache.map(r => r).join(', ')
-    let newMember_role = newMember.roles.cache.map(r => r).join(', ')
-    oldMember_role = oldMember_role.replace(", @everyone", '')
-    newMember_role = newMember_role.replace(", @everyone", '')
-    oldMember_role = oldMember_role.split(', ')
-    newMember_role = newMember_role.split(', ')
-    //newMember_role = '['+ newMember_role +']'
-    if (oldMember_role != newMember_role){
+    let oldMember_role = oldMember.roles.cache.map(r => r).join(', ').replace(", @everyone", '').split(', ')
+    let newMember_role = newMember.roles.cache.map(r => r).join(', ').replace(", @everyone", '').split(', ')
+    
+    if (oldMember_role.toString() != newMember_role.toString()){
         if (oldMember_role.length > newMember_role.length){
             text = (':heavy_minus_sign: ' + oldMember_role.filter(e => !new Set(newMember_role).has(e)));
         } 
@@ -138,5 +140,5 @@ module.exports = async(client, oldMember, newMember, db, audit) => {
 
 module.exports.help = {
     name: 'guildMemberUpdate',
-    description: 'Обновление польз'
+    description: 'Обновление пользователя'
 }

@@ -8,6 +8,7 @@ module.exports = (client, token) => {
     client.communication = new Discord.Collection()
     const commands = [];
 
+    // ================= Загружаем Commands ============================
 
     fs.readdir('./commands', (err, files) => { // чтение файлов в папке commands
         if (err) console.log(err)

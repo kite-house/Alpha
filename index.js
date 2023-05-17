@@ -22,7 +22,7 @@ loader(client, process.env.SECRET_TOKEN_DISCORD)
 // ================= Main Code ===================================
 
 client.on('ready', () => {
-    client.commands.get('migrations_full_database')(client, interaction = 'System', db)
+    client.commands.get('database_update')(client, interaction = 'System', db)
     console.log('SYSTEM-INFO: DATABASE-MIGRATIONS | STATUS: ACCEPT!')
     console.log("SYSTEM-INFO: START | STATUS: ACCEPT!")
     client.user.setPresence({
@@ -44,8 +44,8 @@ client.on('interactionCreate', interaction => {
         client.commands.get('clear')(client, interaction, value)
     }
 
-    if (interaction.commandName === 'migrations_full_database'){
-        client.commands.get('migrations_full_database')(client, interaction, db)
+    if (interaction.commandName === 'database_update'){
+        client.commands.get('database_update')(client, interaction, db)
     }
 })
 
@@ -85,6 +85,7 @@ client.on('guildMemberRemove', oldUser => {
     client.events.get('guildMemberRemove')(client,oldUser,db, ds_member)
     client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get("1105726968260997120").memberCount}`)
 })
+
 
 /// =========== Manage Server ===========
 

@@ -13,6 +13,7 @@ module.exports = async (client, upChannel, audit) => {
     if (upChannel.type == 2){
         typeChannel = 'голосовой'
     }
+    
     client.channels.cache.get(audit).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: upChannel.guild.iconURL({Dynamic : true}) , name: upChannel.guild.name})
