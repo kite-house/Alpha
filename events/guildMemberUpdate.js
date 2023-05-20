@@ -107,6 +107,10 @@ module.exports = async(client, oldMember, newMember, db, config) => {
         if (newMember_role.length > oldMember_role.length){
             text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
         }
+
+        if (text == undefined){
+            text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
+        }
         
         client.channels.cache.get(config.ds_member).send(
             {embeds : [new EmbedBuilder()

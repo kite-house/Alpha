@@ -19,7 +19,7 @@ module.exports = (client, interaction, config) => {
     })
 
     try{
-        client.DisTube.resume(interaction)
+        client.DisTube.skip(interaction)
     } catch(err){
         if (err == "DisTubeError [NO_QUEUE]: There is no playing queue in this guild"){
             return interaction.reply(
@@ -37,21 +37,6 @@ module.exports = (client, interaction, config) => {
                 ],ephemeral: true 
             })
         }
-
-        if (err == 'DisTubeError [RESUMED]: The queue has been playing already'){
-            return interaction.reply(
-                {embeds : [new EmbedBuilder()
-                    .setTitle(`Возникла ошибка!`)
-                    .setColor(Discord.Colors.Red)
-                    .setDescription(`Музыка не на паузе!`)
-                    .setFooter({
-                        iconURL : client.user.avatarURL(client.user.avatar),
-                        text: client.user.username + " • " + interaction.member.voice.channel.name
-                    })
-                    .setTimestamp()
-                ],ephemeral: true    
-            })
-        }
     } 
 
     
@@ -59,7 +44,7 @@ module.exports = (client, interaction, config) => {
         {embeds : [new EmbedBuilder()
             .setTitle(`Успешно!`)
             .setColor(Discord.Colors.Green)
-            .setDescription(`Вы восстановили проигрование музыки!`)
+            .setDescription(`Вы переключились на следующию песню!`)
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
                 text: client.user.username + " • " + interaction.member.voice.channel
@@ -72,8 +57,8 @@ module.exports = (client, interaction, config) => {
 }
 
 module.exports.help = {
-    name : 'resume',
+    name : 'skip',
     data: new SlashCommandBuilder()
-    .setName("resume")
-    .setDescription("Восстановить проигрование музыки!")
+    .setName("skip")
+    .setDescription("Пропустить песню!")
 }

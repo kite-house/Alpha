@@ -3,8 +3,8 @@ const Discord = require('discord.js')
 const { EmbedBuilder } = require("@discordjs/builders");
 const config = require('./config.json')
 const talkedRecently = new Set();
-const db = require('./db')
-const check_permision = require('./check_permision')
+const db = require('./module/db')
+const check_permision = require('./module/check_permision')
 const { DisTube } = require('distube')
 
 
@@ -25,7 +25,7 @@ client.DisTube = new DisTube(client, {
     emitAddListWhenCreatingQueue: false,
 })
 
-require('./loader')(client, process.env.SECRET_TOKEN_DISCORD)
+require('./module/loader')(client, process.env.SECRET_TOKEN_DISCORD)
 
 // ================= Main Code ===================================
 
@@ -50,7 +50,7 @@ client.on('interactionCreate', interaction => {
                 .setDescription(`Не спешите!`)
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username + " • " + interaction.member.voice.channel.name
+                    text: client.user.username + " • " + interaction.member.voice.channel
                 })
                 .setTimestamp()
             ],ephemeral: true    
@@ -123,6 +123,18 @@ client.on('interactionCreate', interaction => {
     if (interaction.commandName === 'pause'){
         client.commands.get('pause')(client, interaction, config)
     }
+
+    if (interaction.commandName === 'skip'){
+        client.commands.get('skip')(client, interaction, config)
+    }
+
+    if (interaction.commandName === 'queue'){
+        client.commands.get('queue')(client, interaction, config)
+    }
+
+    if (interaction.commandName == 'back'){
+        client.commands.get('back')(client, interaction, config)
+    }
 })
 
 
@@ -138,7 +150,15 @@ client.on('messageCreate', message => {
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
     if (message.content == 'привет'){
-        message.reply('привет')
+        try{
+           permission = message.member.permissions.has('checkAdmin')
+        } catch(err) {
+            if (err = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: checkAdmin.'){
+                permission = false
+            }
+        }
+        
+        message.reply('Information: ' + permission)
     }
     // Пока не рабочий код
 })
@@ -149,19 +169,19 @@ client.on('messageCreate', message => {
 client.on('guildMemberUpdate', (oldMember,newMember) => {
     console.log(`MEMBER-INFO: USER: ${newMember.user.id} UPDATED`)
     client.events.get('guildMemberUpdate')(client,oldMember, newMember, db, config)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(newMember.guild.id).memberCount}`)
+    client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(newMember.guild.id).memberCount}`)
 })
 
 client.on('guildMemberAdd', newUser => {
     console.log(`MEMBER-INFO: USER: ${newUser.user.id} UPDATED`)
     client.events.get('guildMemberAdd')(client, newUser, db, config)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(newUser.guild.id).memberCount}`)
+    client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(newUser.guild.id).memberCount}`)
 })
 
 client.on('guildMemberRemove', oldUser => {
     console.log(`MEMBER-INFO: USER: ${oldUser.user.id} UPDATED`)
     client.events.get('guildMemberRemove')(client,oldUser, db, config)
-    client.channels.cache.get(members).setName(`Members: ${client.guilds.cache.get(oldUser.guild.id).memberCount}`)
+    client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(oldUser.guild.id).memberCount}`)
 })
 
 

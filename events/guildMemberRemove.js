@@ -20,8 +20,8 @@ module.exports = async (client, oldUser, db, config) => {
         ]})
 
     db.query(`DELETE FROM users WHERE discord_id = ${oldUser.id}`, function(err,results){
-        if(err) client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${oldUser.nickname}, STATUS: ${err}`);
-        client.channels.cache.get(config_database).send(`DATABASE MIGRATION: ${oldUser.nickname}, STATUS: ACCEPT!`)
+        if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${oldUser.nickname}, STATUS: ${err}`);
+        client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${oldUser.nickname}, STATUS: ACCEPT!`)
     })
 }
 

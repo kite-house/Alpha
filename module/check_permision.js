@@ -9,7 +9,7 @@ module.exports = (client,interaction) => {
         else return false
     }
 
-    if(!check_permision()) return interaction.reply({
+    if(!check_permision()){ interaction.reply({
         embeds : [new EmbedBuilder()
             .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
             .setThumbnail(client.user.avatarURL(client.user.avatar))
@@ -22,6 +22,11 @@ module.exports = (client,interaction) => {
             })
             .setTimestamp()
         ], ephemeral: true });
+    
+    return false 
+
+    } else return true
+    
 }
 
 module.exports.help = {

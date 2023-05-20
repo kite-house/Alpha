@@ -19,8 +19,9 @@ module.exports = (client, interaction, config) => {
     })
 
     try{
-        client.DisTube.resume(interaction)
+        queue = client.DisTube.getQueue(interaction)
     } catch(err){
+        if (err) console.log(err)
         if (err == "DisTubeError [NO_QUEUE]: There is no playing queue in this guild"){
             return interaction.reply(
                 {embeds : [new EmbedBuilder()
@@ -37,43 +38,72 @@ module.exports = (client, interaction, config) => {
                 ],ephemeral: true 
             })
         }
+    }
 
-        if (err == 'DisTubeError [RESUMED]: The queue has been playing already'){
+    authors = ''
+    names = ''
+    durations = ""
+
+    try {
+        for (i in queue.songs){
+            authors = authors + ' ' + queue.songs[i].uploader.name + '\n' + '---------------------------' + '\n'
+            names = names + ' ' + queue.songs[i].name + '\n' + '---------------------------' + '\n'
+            durations = durations + ' ' + queue.songs[i].formattedDuration + '\n' + '---------------------------' + '\n'
+
+        }
+    } catch(err){
+        if (err){
             return interaction.reply(
                 {embeds : [new EmbedBuilder()
-                    .setTitle(`Возникла ошибка!`)
+                    .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
+                    .setThumbnail(client.user.avatarURL(client.user.avatar))
                     .setColor(Discord.Colors.Red)
-                    .setDescription(`Музыка не на паузе!`)
+                    .setTitle('Возникла ошибка!')
+                    .setDescription('Очередь пустая!')
                     .setFooter({
                         iconURL : client.user.avatarURL(client.user.avatar),
-                        text: client.user.username + " • " + interaction.member.voice.channel.name
+                        text: client.user.username
                     })
                     .setTimestamp()
-                ],ephemeral: true    
-            })
+                ],ephemeral: true })
         }
-    } 
-
+    }
     
     interaction.reply(
         {embeds : [new EmbedBuilder()
-            .setTitle(`Успешно!`)
-            .setColor(Discord.Colors.Green)
-            .setDescription(`Вы восстановили проигрование музыки!`)
+            .setAuthor({iconURL: client.user.avatarURL(client.user.avatar), name: 'Очередь воспроизведения:'})
+            //.setThumbnail(song.thumbnail)
+            //.setTitle(`${song.uploader.name}`)
+            .setColor(Discord.Colors.Red)
+            .setFields([
+                {
+                    name: 'Автор',
+                    value: `${authors}`,
+                    inline: true
+                },
+                {
+                    name: 'Название',
+                    value: `${names}`,
+                    inline: true
+                },
+                {
+                    name: 'Длительность',
+                    value: `${durations}`,
+                    inline: true
+                },
+            ])
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
                 text: client.user.username + " • " + interaction.member.voice.channel
             })
             .setTimestamp()
-        ],ephemeral: true    
-    })
-   
+        ],ephemeral: true })
 
 }
 
 module.exports.help = {
-    name : 'resume',
+    name : 'queue',
     data: new SlashCommandBuilder()
-    .setName("resume")
-    .setDescription("Восстановить проигрование музыки!")
+    .setName("queue")
+    .setDescription("Посмотреть очередь.")
 }
