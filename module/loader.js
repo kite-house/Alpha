@@ -1,7 +1,8 @@
 const Discord = require('discord.js')
 const fs = require('fs')
+const path = require('path')
 
-module.exports = (client, token) => {
+module.exports = (client, token, config) => {
     client.commands = new Discord.Collection()
     client.events = new Discord.Collection()
     client.buttons = new Discord.Collection()
@@ -14,27 +15,51 @@ module.exports = (client, token) => {
 
     fs.readdir('./commands', (err, files) => { // чтение файлов в папке commands
         if (err) console.log(err)
-    
-        let jsfile = files.filter(f => f.split('.').pop() === 'js') // файлы не имеющие расширение .js игнорируются
+
+        files_moderator = fs.readdirSync('./commands/moderator')
+        files_music = fs.readdirSync('./commands/music')
+
+        for (i in files_moderator){
+            files_moderator[i] = 'moderator/' + files_moderator[i]
+        }
+
+        for (i in files_music){
+            files_music[i] = 'music/' + files_music[i]
+        }
+
+        let jsfile = files.filter(f => f.split('.').pop() === 'js') + ','// файлы не имеющие расширение .js игнорируются
+        //jsfile = Object.assign(jsfile, files_moderator.filter(f => f.split('.').pop() === 'js')) // файлы не имеющие расширение .js игнорируются
+        //jsfile = Object.assign(jsfile,files_music.filter(f => f.split('.').pop() === 'js')) // файлы не имеющие расширение .js игнорируются
+
+        jsfile = jsfile + files_moderator.filter(f => f.split('.').pop() === 'js') + ','
+        jsfile = jsfile + files_music.filter(f => f.split('.').pop() === 'js')
+        jsfile = jsfile.split(',')
+
         if (jsfile.length <= 0) return console.log('ERROR-INFO: COMMANDS NOT FOUND!') // если нет ни одного файла с расширением .js
-    
+
         jsfile.forEach((f, i) => { // добавляем каждый файл в коллекцию команд
             let props = require(`../commands/${f}`)
             client.commands.set(props.help.name, props)
             commands.push(props.help.data.toJSON());
         })
-        const rest = new Discord.REST().setToken(token);
 
-        id_server = '1105726968260997120'
-        id_server_main = "879374979161026601"
+        // Регистрируем команды на серверах
+        const rest = new Discord.REST().setToken(token);
         
-        const data = rest.put(
-            Discord.Routes.applicationGuildCommands('960267917088411679', id_server),
+        rest.put(
+            Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server),
             { body: commands },
         
-        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} COMMANDS | STATUS: ACCEPT!`)
+        );
+
+        rest.put(
+            Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_main),
+            { body: commands },
         
         );
+
+        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} COMMANDS | STATUS: ACCEPT!`)
+
     })
     
     // ================= Загружаем Events ============================
@@ -52,7 +77,7 @@ module.exports = (client, token) => {
         })
     })
 
-    // КНОПКПИ
+    // ================= Загружаем Buttons ============================
 
     fs.readdir('./buttons', (err, files) => { // чтение файлов в папке commands
         if (err) console.log(err)
@@ -66,17 +91,20 @@ module.exports = (client, token) => {
             buttons.push(props.help.data.toJSON());
         })
         const rest = new Discord.REST().setToken(token);
-
-        id_server = '1105726968260997120'
-        id_server_main = "879374979161026601"
         
-        const data = rest.put(
-            Discord.Routes.applicationGuildCommands('960267917088411679', id_server),
+        rest.put(
+            Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server),
+            { body: buttons },
+
+        );
+
+        rest.put(
+            Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_main),
             { body: buttons },
         
-        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} BUTTONS | STATUS: ACCEPT!`)
-        
         );
+
+        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} BUTTONS | STATUS: ACCEPT!`)
     })
     
 }

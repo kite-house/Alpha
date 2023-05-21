@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-module.exports = (client, interaction, name, time, date, text, check_permision) => {
+module.exports = (client, interaction, name, time, date, text, check_permision, db, config) => {
     if (!check_permision(client, interaction)) return
     if (date == null){
         date = 'Сегодня'
@@ -30,8 +30,6 @@ module.exports = (client, interaction, name, time, date, text, check_permision) 
     ], ephemeral: true})
 
 
-    id_cnannel = '1109513252825739356'
-
     const go_event = new ButtonBuilder()
     .setCustomId(`go_event`)
     .setLabel('Участвовать!')
@@ -44,11 +42,16 @@ module.exports = (client, interaction, name, time, date, text, check_permision) 
     .setDisabled(false)
     .setStyle(ButtonStyle.Danger);
 
+    const queue_event = new ButtonBuilder()
+    .setCustomId(`queue_event`)
+    .setLabel('Список')
+    .setDisabled(false)
+    .setStyle(ButtonStyle.Secondary);
 
     const row = new ActionRowBuilder()
-    .addComponents(go_event, leave_event)
+    .addComponents(go_event, leave_event, queue_event)
 
-    message = client.channels.cache.get("1109513252825739356").send({
+    client.channels.cache.get(config.reg_event).send({
         embeds: [new EmbedBuilder()
             .setColor(Discord.Colors.Green)
             .setTitle("Сбор на мероприятие!")
@@ -63,9 +66,24 @@ module.exports = (client, interaction, name, time, date, text, check_permision) 
                 text: client.user.username + ' BOT'
             })
             .setTimestamp()
-    ], components: [row]})
+    ], components: [row]}).then(message => {
 
-    //message.threads.create(message)
+        if (date == 'Сегодня'){
+            date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString().split(',')[0]
+        }
+
+        Create_Events_DB = [
+            [message.id],
+            [interaction.user.id],
+            [`${name} | ${date}`],
+            ['']
+        ]
+
+        db.query(`INSERT INTO events(id_events, created, information, participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
+            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${err}`);
+            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
+        })
+    })
 }
 
 
@@ -83,13 +101,13 @@ module.exports.help = {
     .addStringOption(option => 
         option
         .setName('time')
-        .setDescription("Время начало мероприятие")
+        .setDescription("Время начало мероприятие (Часы:Минуты)")
         .setRequired(true)
     )
     .addStringOption(option => 
         option
         .setName("date")
-        .setDescription("Дата проведения мероприятие(оставьте пустым если мероприятие пройдёт сегодня)")
+        .setDescription("Дата проведения мероприятие(оставьте пустым если мероприятие пройдёт сегодня), Месяц/День/Год")
         .setRequired(false)
     )
     .addStringOption(option => 

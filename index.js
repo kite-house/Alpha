@@ -26,7 +26,7 @@ client.DisTube = new DisTube(client, {
     emitAddListWhenCreatingQueue: false,
 })
 
-require('./module/loader')(client, process.env.SECRET_TOKEN_DISCORD)
+require('./module/loader')(client, process.env.SECRET_TOKEN_DISCORD, config)
 
 // ================= Main Code ===================================
 
@@ -148,7 +148,7 @@ client.on('interactionCreate', interaction => {
         const time = interaction.options.getString('time')
         const date = interaction.options.getString('date')
         const text = interaction.options.getString('text')
-        client.commands.get('event')(client, interaction, name, time, date, text, check_permision)
+        client.commands.get('event')(client, interaction, name, time, date, text, check_permision, db, config)
     }
 
     if (interaction.customId == `read_message`){
@@ -161,7 +161,15 @@ client.on('interactionCreate', interaction => {
     } 
 
     if (interaction.customId == 'go_event'){
-        client.buttons.get('go_event')(client, interaction, name, time, date, text)
+        client.buttons.get('go_event')(client, interaction, db, config)
+    }
+
+    if (interaction.customId == 'leave_event'){
+        client.buttons.get('leave_event')(client, interaction, db, config)
+    }
+
+    if (interaction.commandId == 'queue_event'){
+        client.buttons.get('queue_event')(client, interaction, db, config)
     }
 
 })
@@ -179,7 +187,8 @@ client.on('messageCreate', message => {
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
     if (message.content == 'привет'){
-        interaction.reply(client.user.id)
+        Date = 
+        message.reply(new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString())
     }
     // Пока не рабочий код
 })
