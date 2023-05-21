@@ -100,15 +100,14 @@ module.exports = async(client, oldMember, newMember, db, config) => {
     let newMember_role = newMember.roles.cache.map(r => r).join(', ').replace(", @everyone", '').split(', ')
     
     if (oldMember_role.toString() != newMember_role.toString()){
+
+        text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
+
         if (oldMember_role.length > newMember_role.length){
             text = (':heavy_minus_sign: ' + oldMember_role.filter(e => !new Set(newMember_role).has(e)));
         } 
         
         if (newMember_role.length > oldMember_role.length){
-            text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
-        }
-
-        if (text == undefined){
             text = (':heavy_plus_sign: ' + newMember_role.filter(e => !new Set(oldMember_role).has(e)));
         }
         

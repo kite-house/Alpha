@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
 module.exports = (client, interaction, value, check_permision) => {
-    check_permision(client, interaction)
+    if(!check_permision(client, interaction)) return
     interaction.channel.bulkDelete(value).then(() => {
         interaction.reply(
             {embeds : [new EmbedBuilder()

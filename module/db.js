@@ -9,5 +9,5 @@ module.exports = mysql.createConnection({
 
 module.exports.help = {
     name : "db",
-    descrtiption: 'db'
+    descrtiption: 'Подключение к базе данных!'
 }

@@ -12,6 +12,7 @@ const client = new Discord.Client({
     intents: [
     Discord.GatewayIntentBits.Guilds,
     Discord.GatewayIntentBits.GuildMessages,
+    Discord.GatewayIntentBits.GuildPresences,
     Discord.GatewayIntentBits.GuildVoiceStates,
     Discord.GatewayIntentBits.MessageContent,
     Discord.GatewayIntentBits.GuildMembers,
@@ -50,7 +51,7 @@ client.on('interactionCreate', interaction => {
                 .setDescription(`Не спешите!`)
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username + " • " + interaction.member.voice.channel
+                    text: client.user.username
                 })
                 .setTimestamp()
             ],ephemeral: true    
@@ -135,6 +136,34 @@ client.on('interactionCreate', interaction => {
     if (interaction.commandName == 'back'){
         client.commands.get('back')(client, interaction, config)
     }
+
+    if (interaction.commandName == 'all'){
+        const roles = interaction.options.getRole("roles") 
+        const text = interaction.options.getString("text")
+        client.commands.get('all')(client, interaction, roles, text, check_permision)
+    }
+
+    if (interaction.commandName == 'event'){
+        const name = interaction.options.getString("name")
+        const time = interaction.options.getString('time')
+        const date = interaction.options.getString('date')
+        const text = interaction.options.getString('text')
+        client.commands.get('event')(client, interaction, name, time, date, text, check_permision)
+    }
+
+    if (interaction.customId == `read_message`){
+        try{
+            client.channels.cache.get("1109501125507436674").send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
+            interaction.message.delete()
+        } catch(err){
+            console.log(err)
+        }
+    } 
+
+    if (interaction.customId == 'go_event'){
+        client.buttons.get('go_event')(client, interaction, name, time, date, text)
+    }
+
 })
 
 
@@ -150,15 +179,7 @@ client.on('messageCreate', message => {
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
     if (message.content == 'привет'){
-        try{
-           permission = message.member.permissions.has('checkAdmin')
-        } catch(err) {
-            if (err = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: checkAdmin.'){
-                permission = false
-            }
-        }
-        
-        message.reply('Information: ' + permission)
+        interaction.reply(client.user.id)
     }
     // Пока не рабочий код
 })

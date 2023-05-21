@@ -2,14 +2,17 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 
 module.exports = (client,interaction) => {
-    function check_permision(){
-        if (interaction.member._roles.find(element => element === '1105728071350353932') != undefined) return true
-        if (interaction.member._roles.find(element => element === '1105727216882565180') != undefined) return true
-        if (interaction.member._roles.find(element => element === '1105728629092139070') != undefined) return true
-        else return false
+    try{
+        permission = interaction.member.permissions.has('checkAdmin')
+    } catch(err) {
+        if (err = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: checkAdmin.'){
+            permission = false
+        }
     }
+    
+     
 
-    if(!check_permision()){ interaction.reply({
+    if(!permission){ interaction.reply({
         embeds : [new EmbedBuilder()
             .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
             .setThumbnail(client.user.avatarURL(client.user.avatar))
@@ -31,5 +34,5 @@ module.exports = (client,interaction) => {
 
 module.exports.help = {
     name : 'check_permision',
-    help : 'проверка на права'
+    help : 'Проверка на права администратора!'
 }
