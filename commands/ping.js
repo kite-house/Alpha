@@ -29,7 +29,7 @@ module.exports = async (client, interaction) => {
 
 }
 
-// ================== HELP ============================
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'ping',

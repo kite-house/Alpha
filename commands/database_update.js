@@ -50,7 +50,7 @@ module.exports = async (client, interaction, db, config) => {
 
 }
 
-// ================== HELP ============================
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'database_update',
