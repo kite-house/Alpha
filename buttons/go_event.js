@@ -63,9 +63,18 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
+/*
 module.exports.help = {
     name : 'go_event',
-    data: new SlashCommandBuilder()
+    data: new ButtonBuilder()
     .setName("go_event")
     .setDescription("Зарегистрироваться на мероприятие!")
+}
+*/
+
+module.exports.help = {
+    name : 'go_event',
+    data: new ButtonBuilder()
+    .setCustomId('go_event')
+    .setLabel('Участвовать!')
 }

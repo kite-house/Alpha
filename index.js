@@ -43,6 +43,7 @@ client.on('ready', () => {
 /// =========== Commands ===============
 
 client.on('interactionCreate', interaction => {
+    if(!interaction.isCommand()) return;
     if (talkedRecently.has(interaction.user.id)) {
         return interaction.reply(
             {embeds : [new EmbedBuilder()
@@ -150,14 +151,33 @@ client.on('interactionCreate', interaction => {
         const text = interaction.options.getString('text')
         client.commands.get('event')(client, interaction, name, time, date, text, check_permision, db, config)
     }
+})
+
+client.on('interactionCreate', interaction => {
+    if(!interaction.isButton()) return;
+    if (talkedRecently.has(interaction.user.id)) {
+        return interaction.reply(
+            {embeds : [new EmbedBuilder()
+                .setTitle(`Возникла ошибка!`)
+                .setColor(Discord.Colors.Red)
+                .setDescription(`Не спешите!`)
+                .setFooter({
+                    iconURL : client.user.avatarURL(client.user.avatar),
+                    text: client.user.username
+                })
+                .setTimestamp()
+            ],ephemeral: true    
+        })
+    } else {
+        talkedRecently.add(interaction.user.id);
+        setTimeout(() => {
+        talkedRecently.delete(interaction.user.id);
+        }, 1000);
+    }
 
     if (interaction.customId == `read_message`){
-        try{
-            client.channels.cache.get("1109501125507436674").send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
-            interaction.message.delete()
-        } catch(err){
-            console.log(err)
-        }
+        client.channels.cache.get(config.log_read_all).send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
+        interaction.message.delete()
     } 
 
     if (interaction.customId == 'go_event'){
@@ -171,7 +191,6 @@ client.on('interactionCreate', interaction => {
     if (interaction.commandId == 'queue_event'){
         client.buttons.get('queue_event')(client, interaction, db, config)
     }
-
 })
 
 
@@ -187,8 +206,7 @@ client.on('messageCreate', message => {
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
     if (message.content == 'привет'){
-        Date = 
-        message.reply(new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString())
+        message.reply('привет')
     }
     // Пока не рабочий код
 })

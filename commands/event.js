@@ -51,6 +51,12 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
     const row = new ActionRowBuilder()
     .addComponents(go_event, leave_event, queue_event)
 
+    for (let i = 0; i <= 2; i++) {
+        client.channels.cache.get(config.reg_event).send("@everyone").then(msg => {
+            setTimeout(() => msg.delete(), 3000)
+        })
+    }
+
     client.channels.cache.get(config.reg_event).send({
         embeds: [new EmbedBuilder()
             .setColor(Discord.Colors.Green)

@@ -4,7 +4,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 
 
 module.exports = (client, interaction, db, config) => {
-    console.log("DSDA")
     id_event = interaction.message.id
     text = ''
 
@@ -37,9 +36,17 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
+/*
 module.exports.help = {
     name : 'queue_event',
-    data: new SlashCommandBuilder()
+    data: new ButtonBuilder()
     .setName("queue_event")
     .setDescription("Посмотреть список участников!")
+}
+*/
+module.exports.help = {
+    name : 'queue_event',
+    data: new ButtonBuilder()
+    .setCustomId("queue_event")
+    .setLabel('Список')
 }

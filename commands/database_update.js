@@ -19,7 +19,7 @@ module.exports = async (client, interaction, db, config) => {
 
     db.query('DELETE FROM users WHERE 1')
     db.query('ALTER TABLE users AUTO_INCREMENT = 1')
-    guild = client.guilds.cache.get("1105726968260997120")
+    guild = client.guilds.cache.get(config.id_server_main)
     let res = await guild.members.fetch();
     res.forEach((member) => {
         user = member.user

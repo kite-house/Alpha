@@ -11,7 +11,6 @@ module.exports = (client,interaction) => {
             }
         }
     }
-    
      
 
     if(!permission){ interaction.reply({

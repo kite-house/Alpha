@@ -11,31 +11,30 @@ module.exports = (client, interaction, db, config) => {
         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ACCEPT!`)
         information = results[0].information
         participants = results[0].participants
-
-        for (i in participants.split(', ')){
-            if(participants.split(', ')[i] != interaction.user.id){
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setColor(Discord.Colors.Red)
-                        .setTitle("Возникла ошибка!")
-                        .setDescription('Вы и так не зарегистрированы на меропрятие!')
-                        .setFields({
-                            name : "Информация: ",
-                            value : `${information}`
-                        })
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username + ' BOT'
-                        })
-                        .setTimestamp()
-                ], ephemeral: true})
-            }
+        
+        if(participants.split(', ').find(element => element === interaction.user.id) == undefined){
+            return interaction.reply({
+                embeds: [new EmbedBuilder()
+                    .setColor(Discord.Colors.Red)
+                    .setTitle("Возникла ошибка!")
+                    .setDescription('Вы и так не зарегистрированы на меропрятие!')
+                    .setFields({
+                        name : "Информация: ",
+                        value : `${information}`
+                    })
+                    .setFooter({
+                        iconURL : client.user.avatarURL(client.user.avatar),
+                        text: client.user.username + ' BOT'
+                    })
+                    .setTimestamp()
+            ], ephemeral: true})
         }
 
         if (participants == interaction.user.id){
             participants = ''
         } else {
             participants = participants.replace(interaction.user.id + ', ', '')
+            participants = participants.replace(interaction.user.id, '')
         }
 
         db.query(`UPDATE events SET participants = '${participants}' WHERE id_events = '${id_event}'`, function(err, results) {
@@ -62,9 +61,17 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
+/*
 module.exports.help = {
     name : 'leave_event',
-    data: new SlashCommandBuilder()
+    data: new ButtonBuilder()
     .setName("leave_event")
     .setDescription("Отменить участие на мероприятие!")
+} */
+
+module.exports.help = {
+    name : 'leave_event',
+    data: new ButtonBuilder()
+    .setCustomId("leave_event")
+    .setLabel('Отменить участие!')
 }

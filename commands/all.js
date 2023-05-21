@@ -10,7 +10,7 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
     const read = new ButtonBuilder()
     .setCustomId(`read_message`)
     .setLabel('Прочитал')
-    .setDisabled(true)
+    .setDisabled(false)
     .setStyle(ButtonStyle.Secondary);
 
     const row = new ActionRowBuilder()
