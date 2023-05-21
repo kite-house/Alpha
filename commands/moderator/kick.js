@@ -39,6 +39,7 @@ module.exports = (client, interaction, user, reason, check_permision) => {
     ], ephemeral: true })
 }
 
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'kick',

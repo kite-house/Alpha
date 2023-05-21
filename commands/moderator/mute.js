@@ -44,6 +44,7 @@ module.exports = (client, interaction, user, reason, time, check_permision) => {
     ], ephemeral: true })
 }
 
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'mute',

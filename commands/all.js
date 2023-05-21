@@ -70,6 +70,8 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
     }
 }
 
+// ====================== HELP ==============================
+
 module.exports.help = {
     name : 'all',
     data: new SlashCommandBuilder()

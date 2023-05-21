@@ -92,6 +92,8 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
     })
 }
 
+// ====================== HELP ==============================
+
 
 module.exports.help = {
     name : 'event',

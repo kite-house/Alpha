@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const {ButtonBuilder} = require('discord.js');
 
 
 module.exports = (client, interaction, db, config) => {
@@ -36,14 +36,8 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
-/*
-module.exports.help = {
-    name : 'queue_event',
-    data: new ButtonBuilder()
-    .setName("queue_event")
-    .setDescription("Посмотреть список участников!")
-}
-*/
+// ====================== HELP ==============================
+
 module.exports.help = {
     name : 'queue_event',
     data: new ButtonBuilder()

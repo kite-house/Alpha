@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const { ButtonBuilder } = require('discord.js');
 
 module.exports = (client, interaction, db, config) => {
     
@@ -61,13 +61,7 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
-/*
-module.exports.help = {
-    name : 'leave_event',
-    data: new ButtonBuilder()
-    .setName("leave_event")
-    .setDescription("Отменить участие на мероприятие!")
-} */
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'leave_event',

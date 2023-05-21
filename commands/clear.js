@@ -12,7 +12,8 @@ module.exports = (client, interaction, value, check_permision) => {
             ], ephemeral: true })
     });
 }
-// ================== HELP ============================
+
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'clear',

@@ -63,14 +63,7 @@ module.exports = (client, interaction, db, config) => {
     })
 }
 
-/*
-module.exports.help = {
-    name : 'go_event',
-    data: new ButtonBuilder()
-    .setName("go_event")
-    .setDescription("Зарегистрироваться на мероприятие!")
-}
-*/
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'go_event',

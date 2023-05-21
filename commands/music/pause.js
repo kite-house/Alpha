@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
 module.exports = (client, interaction, config) => {
-    if (interaction.channel.id != config.DJ) return interaction.reply(
+    if (interaction.channel.id != config.music) return interaction.reply(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
             .setThumbnail(client.user.avatarURL(client.user.avatar))
@@ -70,6 +70,8 @@ module.exports = (client, interaction, config) => {
    
 
 }
+
+// ====================== HELP ==============================
 
 module.exports.help = {
     name : 'pause',
