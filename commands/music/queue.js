@@ -9,7 +9,7 @@ module.exports = (client, interaction, config) => {
             .setThumbnail(client.user.avatarURL(client.user.avatar))
             .setColor(Discord.Colors.Red)
             .setTitle('Возникла ошибка!')
-            .setDescription('Данную команду невозможно использовать в этом канале! Испольуйте https://discord.com/channels/1105726968260997120/1108219171814260816')
+            .setDescription(`Данную команду невозможно использовать в этом канале! Испольуйте https://discord.com/channels/${config.id_server_test}/${config.music}`)
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
                 text: client.user.username
@@ -18,27 +18,25 @@ module.exports = (client, interaction, config) => {
         ],ephemeral: true 
     })
 
-    try{
-        queue = client.DisTube.getQueue(interaction)
-    } catch(err){
-        if (err) console.log(err)
-        if (err == "DisTubeError [NO_QUEUE]: There is no playing queue in this guild"){
-            return interaction.reply(
-                {embeds : [new EmbedBuilder()
-                    .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                    .setThumbnail(client.user.avatarURL(client.user.avatar))
-                    .setColor(Discord.Colors.Red)
-                    .setTitle('Возникла ошибка!')
-                    .setDescription('В данный момент ничего не проигрывается!')
-                    .setFooter({
-                        iconURL : client.user.avatarURL(client.user.avatar),
-                        text: client.user.username
-                    })
-                    .setTimestamp()
-                ],ephemeral: true 
-            })
-        }
-    }
+
+        queue = client.DisTube.getQueue(interaction).catch(error => {
+            if (error == "DisTubeError [NO_QUEUE]: There is no playing queue in this guild"){
+                return interaction.reply(
+                    {embeds : [new EmbedBuilder()
+                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
+                        .setThumbnail(client.user.avatarURL(client.user.avatar))
+                        .setColor(Discord.Colors.Red)
+                        .setTitle('Возникла ошибка!')
+                        .setDescription('В данный момент ничего не проигрывается!')
+                        .setFooter({
+                            iconURL : client.user.avatarURL(client.user.avatar),
+                            text: client.user.username
+                        })
+                        .setTimestamp()
+                    ],ephemeral: true 
+                })
+            }
+        })
 
     authors = ''
     names = ''

@@ -65,5 +65,3 @@ fs.readdir('./buttons', (err, files) => { // чтение файлов в пап
 
     console.log(`SYSTEM-INFO: LOADING ${jsfile.length} BUTTONS | STATUS: ACCEPT!`)
 })
-
-console.log('FINISH')

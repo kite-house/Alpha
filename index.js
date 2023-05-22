@@ -175,6 +175,8 @@ client.on('interactionCreate', interaction => {
         }, 1000);
     }
 
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId}`)
+
     if (interaction.customId == `read_message`){
         client.channels.cache.get(config.log_read_all).send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
         interaction.message.delete()
@@ -188,7 +190,7 @@ client.on('interactionCreate', interaction => {
         client.buttons.get('leave_event')(client, interaction, db, config)
     }
 
-    if (interaction.commandId == 'queue_event'){
+    if (interaction.customId == 'queue_event'){
         client.buttons.get('queue_event')(client, interaction, db, config)
     }
 })

@@ -34,7 +34,7 @@ module.exports = (client, interaction, db, config) => {
             participants = ''
         } else {
             participants = participants.replace(interaction.user.id + ', ', '')
-            participants = participants.replace(interaction.user.id, '')
+            participants = participants.replace(', ' + interaction.user.id, '')
         }
 
         db.query(`UPDATE events SET participants = '${participants}' WHERE id_events = '${id_event}'`, function(err, results) {

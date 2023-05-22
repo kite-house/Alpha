@@ -13,25 +13,27 @@ module.exports = (client, interaction, db, config) => {
         information = results[0].information
         participants = results[0].participants
 
+        number = 0
         for (i in participants.split(', ')){
-            text = text + `Номер: ${i++}  //  <@${participants[0].split(', ')[i]}>`
+            number += 1
+            text = text + `Номер: ${number}  //  <@${participants.split(', ')[i]}> \n` 
         }
 
-        return interaction.reply(
-            {embeds : [new EmbedBuilder()
-            .setTitile(`Список на мероприятие: ${information}`)
+        return interaction.reply({
+            embeds : [new EmbedBuilder()
+            .setTitle(`Список на мероприятие: ${information}`)
             .setDescription(text)
             .setColor(Discord.Colors.White)
             .setFields({
                 name : 'Информация',
-                value : `Начал регистрацию: ${results[0].created}`
+                value : `Начал регистрацию: <@${results[0].created}>`
             })
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
                 text: client.user.username + ' BOT'
             })
             .setTimestamp()
-            ]}
+            ], ephemeral: true}
         )
     })
 }
