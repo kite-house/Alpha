@@ -33,9 +33,8 @@ module.exports = async (client, interaction, names, config) => {
             .setTimestamp()
         ],ephemeral: true 
     })
-    //{ephemeral: true}
 
-    await interaction.deferReply();
+    await interaction.deferReply({ephemeral: true});
 
     client.DisTube.play(interaction.member.voice.channel, names)
 
