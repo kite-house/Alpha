@@ -7,6 +7,8 @@ module.exports = mysql.createConnection({
     password: '',
 })
 
+// ====================== HELP ==============================
+
 module.exports.help = {
     name : "db",
     descrtiption: 'Подключение к базе данных!'

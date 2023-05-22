@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
+const EventEmitter = require('events')
 
 module.exports = async (client, interaction, names, config) => {
     if (interaction.channel.id != config.music) return interaction.reply(
@@ -32,8 +33,9 @@ module.exports = async (client, interaction, names, config) => {
             .setTimestamp()
         ],ephemeral: true 
     })
+    //{ephemeral: true}
 
-    await interaction.deferReply({ephemeral: true});
+    await interaction.deferReply();
 
     client.DisTube.play(interaction.member.voice.channel, names)
 
@@ -60,7 +62,7 @@ module.exports = async (client, interaction, names, config) => {
                 ])
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username + " • " + interaction.member.voice.channel
+                    text: client.user.username + " • " + interaction.member.voice.channel.name
                 })
                 .setTimestamp()
             ]})
@@ -90,7 +92,7 @@ module.exports = async (client, interaction, names, config) => {
                 ])
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username + " • " + interaction.member.voice.channel
+                    text: client.user.username + " • " + interaction.member.voice.channel.name
                 })
                 .setTimestamp()
             ]})

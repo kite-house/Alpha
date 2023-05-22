@@ -4,7 +4,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 
 module.exports = async (client, interaction, roles , text, check_permision) => {
     if (!check_permision(client, interaction)) return
-    
 
     await interaction.deferReply({ephemeral: true});
     const read = new ButtonBuilder()

@@ -7,7 +7,6 @@ const db = require('./module/db')
 const check_permision = require('./module/check_permision')
 const { DisTube } = require('distube')
 
-
 const client = new Discord.Client({
     intents: [
     Discord.GatewayIntentBits.Guilds,

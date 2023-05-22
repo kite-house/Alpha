@@ -71,6 +71,8 @@ module.exports = (client, token, config) => {
     
 }
 
+// ====================== HELP ==============================
+
 module.exports.help = {
     name: 'loader',
     description: 'Загружает все команды/каналы/события'
