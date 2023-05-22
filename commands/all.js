@@ -52,6 +52,7 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
                 })
                 .setTimestamp()
         ], ephemeral: true})
+        
     } catch(err){
         return interaction.editReply(
             {embeds : [new EmbedBuilder()
