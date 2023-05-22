@@ -11,6 +11,9 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
     if (text == null){
         text = 'Быть всем!'
     }
+
+
+
     
     interaction.reply({
         embeds: [new EmbedBuilder()
@@ -51,11 +54,12 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
     const row = new ActionRowBuilder()
     .addComponents(go_event, leave_event, queue_event)
 
+    /*
     for (let i = 0; i <= 2; i++) {
         client.channels.cache.get(config.reg_event).send("@everyone").then(msg => {
             setTimeout(() => msg.delete(), 3000)
         })
-    }
+    }*/
 
     client.channels.cache.get(config.reg_event).send({
         embeds: [new EmbedBuilder()
@@ -76,16 +80,18 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
 
         if (date == 'Сегодня'){
             date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString().split(',')[0]
+            //date = '5'
         }
 
         Create_Events_DB = [
             [message.id],
             [interaction.user.id],
             [`${name} | ${date}`],
+            [time],
             ['']
         ]
 
-        db.query(`INSERT INTO events(id_events, created, information, participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
+        db.query(`INSERT INTO events(id_events, created, information, time ,participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
             if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${err}`);
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
@@ -117,6 +123,8 @@ module.exports.help = {
         .setName("date")
         .setDescription("Дата проведения мероприятие(оставьте пустым если мероприятие пройдёт сегодня), Месяц/День/Год")
         .setRequired(false)
+        .setMinLength(9)
+        .setMaxLength(10)
     )
     .addStringOption(option => 
         option

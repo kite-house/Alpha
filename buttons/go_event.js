@@ -2,8 +2,8 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-module.exports = (client, interaction, db, config) => {
-    
+module.exports = async (client, interaction, db, config) => {
+
     id_event = interaction.message.id
 
     db.query(`SELECT * FROM events WHERE id_events = '${id_event}'`, function(err, results) {
@@ -11,6 +11,36 @@ module.exports = (client, interaction, db, config) => {
         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ACCEPT!`)
         information = results[0].information
         participants = results[0].participants
+        time = results[0].time
+
+        datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
+        if (datetime[2] == 'PM'){
+            hours = parseInt(datetime[1].split(':')[0]) + 12
+            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+        }
+        
+        
+        if (datetime >= `${information.split('| ')[1]}, ${time}`){
+            row = interaction.message.components[0]
+            row.components[0] = ButtonBuilder.from(row.components[0]).setDisabled(true)
+            row.components[1] = ButtonBuilder.from(row.components[1]).setDisabled(true)
+            interaction.message.edit({ components: [row] });
+            return interaction.reply({
+                embeds: [new EmbedBuilder()
+                    .setColor(Discord.Colors.Red)
+                    .setTitle("Возникла ошибка!")
+                    .setDescription('Вы не успели, регистрация на мероприятие уже закончилась!')
+                    .setFields({
+                        name : "Информация: ",
+                        value : `${information} // Время: ${time}`
+                    })
+                    .setFooter({
+                        iconURL : client.user.avatarURL(client.user.avatar),
+                        text: client.user.username + ' BOT'
+                    })
+                    .setTimestamp()
+            ], ephemeral: true})
+        }
 
         for (i in participants.split(', ')){
             if(participants.split(', ')[i] == interaction.user.id){
@@ -21,7 +51,7 @@ module.exports = (client, interaction, db, config) => {
                         .setDescription('Вы уже зарегистрированы на мероприятие!')
                         .setFields({
                             name : "Информация: ",
-                            value : `${information}`
+                            value : `${information} // Время: ${time}`
                         })
                         .setFooter({
                             iconURL : client.user.avatarURL(client.user.avatar),
@@ -51,7 +81,7 @@ module.exports = (client, interaction, db, config) => {
                 .setColor(Discord.Colors.Green)
                 .setFields({
                     name : "Информация: ",
-                    value : `${information}`
+                    value : `${information} // Время: ${time}`
                 })
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),

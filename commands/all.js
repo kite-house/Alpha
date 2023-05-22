@@ -52,14 +52,14 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
                 .setTimestamp()
         ], ephemeral: true})
         
-    } catch(err){
+    } catch(error){
         return interaction.editReply(
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
                 .setThumbnail(client.user.avatarURL(client.user.avatar))
                 .setColor(Discord.Colors.Red)
                 .setTitle('Возникла ошибка!')
-                .setDescription(`Ошибка: ${err}`)
+                .setDescription(`${error}`)
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),
                     text: client.user.username

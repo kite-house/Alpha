@@ -3,10 +3,11 @@ const Discord = require('discord.js')
 
 module.exports = (client,interaction) => {
     try{
-        permission = interaction.member.permission.has('checkAdmin')
+        permission = interaction.member.permissions.has('Administration')
+        //console.log(interaction.member)
     } 
     catch (error) {
-        if (error = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: checkAdmin.')
+        if (error = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: Administration.')
             if(interaction.user.id != '343339732975091714'){
                 permission = false
             }

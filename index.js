@@ -178,7 +178,7 @@ client.on('interactionCreate', interaction => {
 
     if (interaction.customId == `read_message`){
         client.channels.cache.get(config.log_read_all).send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
-        interaction.message.delete()
+        interaction.message.delete().catch(error => {error})
     } 
 
     if (interaction.customId == 'go_event'){
