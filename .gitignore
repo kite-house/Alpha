@@ -2,3 +2,5 @@
 node_modules
 start.bat
 Update.txt
+delete_application.js
+load_application.js
