@@ -32,6 +32,7 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
                 ], components: [row]})
 
             } catch(err){
+                console.log(err)
                 client.users.cache.get(interaction.user.id).send(`Не удалось отправить сообщение пользователю <@${users[i]}>`)
             }
         }
@@ -88,6 +89,8 @@ module.exports.help = {
         option
         .setName('text')
         .setDescription("Введите текст который вы хотите отправить другим участникам!")
+        .setMinLength(1)
+        .setMaxLength(255)
         .setRequired(true)
     )
 }
