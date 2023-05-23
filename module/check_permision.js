@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
+const config = require('../config.json')
 
 module.exports = (client,interaction) => {
     try{
@@ -8,10 +9,10 @@ module.exports = (client,interaction) => {
     } 
     catch (error) {
         if (error = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: Administration.')
-            if(interaction.user.id != '343339732975091714'){
+            if(interaction.user.id != config.developerId){
                 permission = false
             }
-            else if (interaction.user.id == '343339732975091714'){
+            else if (interaction.user.id == config.developerId){
                 permission = true
             }
     }

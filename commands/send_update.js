@@ -2,7 +2,20 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, text) => {
+module.exports = async (client, interaction, version, text, config) => {
+    if(interaction.user.id != config.developerId) return interaction.reply({
+        embeds : [new EmbedBuilder()
+            .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
+            .setThumbnail(client.user.avatarURL(client.user.avatar))
+            .setColor(Discord.Colors.Red)
+            .setTitle('Возникла ошибка!')
+            .setDescription('Недостаточно прав для использование!')
+            .setFooter({
+                iconURL : client.user.avatarURL(client.user.avatar),
+                text: client.user.username
+            })
+            .setTimestamp()
+        ], ephemeral: true });
 
     text_edit = text.split(' || ')
 
@@ -42,7 +55,7 @@ module.exports = async (client, interaction, text) => {
         .addFields(
         {
             name: 'Версия',
-            value: "Version(test)",
+            value: {version},
             inline: true
         },
         {
@@ -68,6 +81,13 @@ module.exports.help = {
     data: new SlashCommandBuilder()
     .setName("send_update")
     .setDescription("Вывести сообщение об обновление!")
+    .addStringOption(option => 
+        option
+        .setName('version')
+        .setDescription("Версия обновления")
+        .setRequired(true)
+        .setMinLength(1)
+        )
     .addStringOption(option => 
         option
         .setName("text")

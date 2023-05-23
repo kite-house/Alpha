@@ -13,7 +13,7 @@ module.exports = (client, interaction) => {
         .addFields(
         {
             name: 'Разработчик',
-            value: '<@343339732975091714> (Данил)',
+            value: `<@${config.developerId}> (Данил)`,
             inline: true
         },
         {

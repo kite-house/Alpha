@@ -2,7 +2,7 @@ const { SlashCommandBuilder} = require('discord.js');
 
 module.exports = async (client, interaction, db, config) => {
     if (interaction != 'System'){
-        if(interaction.user.id != interaction.guild.OwnerID) return interaction.reply({
+        if(interaction.user.id != config.developerId) return interaction.reply({
             embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
                 .setThumbnail(client.user.avatarURL(client.user.avatar))

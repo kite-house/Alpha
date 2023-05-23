@@ -153,12 +153,13 @@ client.on('interactionCreate', interaction => {
     }
 
     if (interaction.commandName == 'info'){
-        client.commands.get('info')(client, interaction)
+        client.commands.get('info')(client, interaction, config)
     }
 
     if (interaction.commandName == 'send_update'){
+        const version = interaction.options.getString('version')
         const text = interaction.options.getString('text')
-        client.commands.get('send_update')(client, interaction, text)
+        client.commands.get('send_update')(client, interaction, version, text, config)
     }
 })
 
