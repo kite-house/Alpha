@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = (client, interaction) => {
+module.exports = (client, interaction, config) => {
     interaction.reply(
         {embeds : [new EmbedBuilder()
         .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
