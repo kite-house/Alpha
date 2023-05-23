@@ -13,7 +13,9 @@ module.exports = (client, interaction, db, config) => {
         information = results[0].information
         participants = results[0].participants
         time = results[0].time
-        
+        quantity = results[0].quantity
+        limited = results[0].limited
+
         datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
         if (datetime[2] == 'PM'){
             hours = parseInt(datetime[1].split(':')[0]) + 12
@@ -42,7 +44,7 @@ module.exports = (client, interaction, db, config) => {
             .setColor(Discord.Colors.White)
             .setFields({
                 name : 'Информация',
-                value : `Начал регистрацию: <@${results[0].created}>`
+                value : `Начал регистрацию: <@${results[0].created}>, кол-во участников: (${quantity}/${limited})`
             })
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),

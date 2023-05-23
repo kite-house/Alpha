@@ -2,8 +2,13 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-module.exports = (client, interaction, name, time, date, text, check_permision, db, config) => {
+module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config) => {
     if (!check_permision(client, interaction)) return
+
+    if (limited == null){
+        limited = 999
+    }
+
     if (date == null){
         date = 'Сегодня'
     }
@@ -11,9 +16,6 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
     if (text == null){
         text = 'Быть всем!'
     }
-
-
-
     
     interaction.reply({
         embeds: [new EmbedBuilder()
@@ -23,7 +25,7 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
             .setColor(Discord.Colors.Green)
             .setFields({
                 name : "Информация: ",
-                value : `Дата: ${date}, Время: ${time}, Название: ${name}`
+                value : `Дата: ${date}, Время: ${time}, Название: ${name}, Огран: ${limited} `
             })
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
@@ -69,7 +71,7 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
             .setColor(Discord.Colors.White)
             .setFields({
                 name : "Информация: ",
-                value : `Дата: ${date}, Время: ${time}, Название: ${name}`
+                value : `Дата: ${date}, Время: ${time}, Название: ${name}, Огран: ${limited} `
             })
             .setFooter({
                 iconURL : client.user.avatarURL(client.user.avatar),
@@ -80,7 +82,6 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
 
         if (date == 'Сегодня'){
             date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString().split(',')[0]
-            //date = '5'
         }
 
         Create_Events_DB = [
@@ -88,10 +89,12 @@ module.exports = (client, interaction, name, time, date, text, check_permision, 
             [interaction.user.id],
             [`${name} | ${date}`],
             [time],
+            [0],
+            [limited],
             ['']
         ]
 
-        db.query(`INSERT INTO events(id_events, created, information, time ,participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
+        db.query(`INSERT INTO events(id_events, created, information, time, quantity, limited, participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
             if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${err}`);
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
@@ -118,6 +121,16 @@ module.exports.help = {
         .setDescription("Время начало мероприятие (Часы:Минуты)")
         .setRequired(true)
     )
+
+    .addIntegerOption(option => 
+        option
+        .setName('limited')
+        .setDescription("Ограничение количество участников")
+        .setRequired(false)
+        .setMinValue(1)
+        .setMaxValue(99)
+        )
+
     .addStringOption(option => 
         option
         .setName("date")

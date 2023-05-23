@@ -37,7 +37,7 @@ fs.readdir('./commands', (err, files) => { // чтение файлов в па�
     const rest = new Discord.REST().setToken(process.env.SECRET_TOKEN_DISCORD);
 
     rest.put(
-        Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_main),
+        Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_test),
         { body: commands },
     
     );
@@ -58,7 +58,7 @@ fs.readdir('./buttons', (err, files) => { // чтение файлов в пап
     const rest = new Discord.REST().setToken(process.env.SECRET_TOKEN_DISCORD);
 
     rest.put(
-        Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_main),
+        Discord.Routes.applicationGuildCommands('960267917088411679', config.id_server_test),
         { body: buttons },
     
     );

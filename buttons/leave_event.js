@@ -12,6 +12,8 @@ module.exports = (client, interaction, db, config) => {
         information = results[0].information
         participants = results[0].participants
         time = results[0].time
+        quantity = results[0].quantity
+        limited = results[0].limited
         
         datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
         if (datetime[2] == 'PM'){
@@ -59,6 +61,8 @@ module.exports = (client, interaction, db, config) => {
                     .setTimestamp()
             ], ephemeral: true})
         }
+        
+        quantity = quantity - 1
 
         if (participants == interaction.user.id){
             participants = ''
@@ -67,7 +71,7 @@ module.exports = (client, interaction, db, config) => {
             participants = participants.replace(', ' + interaction.user.id, '')
         }
 
-        db.query(`UPDATE events SET participants = '${participants}' WHERE id_events = '${id_event}'`, function(err, results) {
+        db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_events = '${id_event}'`, function(err, results) {
             if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ${err}`);
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ACCEPT!`)
         })

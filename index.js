@@ -146,9 +146,10 @@ client.on('interactionCreate', interaction => {
     if (interaction.commandName == 'event'){
         const name = interaction.options.getString("name")
         const time = interaction.options.getString('time')
+        const limited = interaction.options.getInteger("limited")
         const date = interaction.options.getString('date')
         const text = interaction.options.getString('text')
-        client.commands.get('event')(client, interaction, name, time, date, text, check_permision, db, config)
+        client.commands.get('event')(client, interaction, name, time, limited, date, text, check_permision, db, config)
     }
 })
 

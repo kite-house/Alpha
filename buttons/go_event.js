@@ -12,6 +12,8 @@ module.exports = async (client, interaction, db, config) => {
         information = results[0].information
         participants = results[0].participants
         time = results[0].time
+        quantity = results[0].quantity
+        limited = results[0].limited
 
         datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
         if (datetime[2] == 'PM'){
@@ -62,13 +64,33 @@ module.exports = async (client, interaction, db, config) => {
             }
         }
 
+        if (quantity >= limited){
+            return interaction.reply({
+                embeds: [new EmbedBuilder()
+                    .setColor(Discord.Colors.Red)
+                    .setTitle("Возникла ошибка!")
+                    .setDescription('Превышен лимит участников на мероприятие!')
+                    .setFields({
+                        name : "Информация: ",
+                        value : `${information} // Время: ${time}`
+                    })
+                    .setFooter({
+                        iconURL : client.user.avatarURL(client.user.avatar),
+                        text: client.user.username + ' BOT'
+                    })
+                    .setTimestamp()
+            ], ephemeral: true})
+        }
+
+        quantity = quantity + 1
+
         if (participants == ''){
             participants = interaction.user.id
         } else {
             participants = participants + ', ' + interaction.user.id
         }
 
-        db.query(`UPDATE events SET participants = '${participants}' WHERE id_events = '${id_event}'`, function(err, results) {
+        db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_events = '${id_event}'`, function(err, results) {
             if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ${err}`);
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ACCEPT!`)
         })
