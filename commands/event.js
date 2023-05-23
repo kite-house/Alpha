@@ -56,12 +56,12 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
     const row = new ActionRowBuilder()
     .addComponents(go_event, leave_event, queue_event)
 
-    /*
+    
     for (let i = 0; i <= 2; i++) {
         client.channels.cache.get(config.reg_event).send("@everyone").then(msg => {
             setTimeout(() => msg.delete(), 3000)
         })
-    }*/
+    }
 
     client.channels.cache.get(config.reg_event).send({
         embeds: [new EmbedBuilder()

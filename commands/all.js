@@ -32,7 +32,6 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
                 ], components: [row]})
 
             } catch(err){
-                console.log(err)
                 client.users.cache.get(interaction.user.id).send(`Не удалось отправить сообщение пользователю <@${users[i]}>`)
             }
         }
