@@ -151,6 +151,15 @@ client.on('interactionCreate', interaction => {
         const text = interaction.options.getString('text')
         client.commands.get('event')(client, interaction, name, time, limited, date, text, check_permision, db, config)
     }
+
+    if (interaction.commandName == 'info'){
+        client.commands.get('info')(client, interaction)
+    }
+
+    if (interaction.commandName == 'send_update'){
+        const text = interaction.options.getString('text')
+        client.commands.get('send_update')(client, interaction, text)
+    }
 })
 
 client.on('interactionCreate', interaction => {
