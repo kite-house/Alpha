@@ -30,6 +30,8 @@ module.exports = async (client, interaction, db, config) => {
         }
 
         datetime = datetime()
+
+        console.log(datetime)
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
