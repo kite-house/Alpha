@@ -18,19 +18,21 @@ module.exports = async (client, interaction, db, config) => {
 
         function datetime(){
             datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
-            if (datetime[2]== 'PM'){
-                hours = parseInt(datetime[1].split(':')[0]) + 12
-                datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-            }
-            else if (datetime[2] == 'AM'){
-                hours = parseInt(datetime[1].split(':')[0])
-                datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+            while (datetime[2] == undefined){
+                if (datetime[2]== 'PM'){
+                    hours = parseInt(datetime[1].split(':')[0]) + 12
+                    datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+                }
+                else if (datetime[2] == 'AM'){
+                    hours = parseInt(datetime[1].split(':')[0])
+                    datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+                }
             }
             return datetime
         }
-
+        
         datetime = datetime()
-
+        
         console.log(datetime)
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
