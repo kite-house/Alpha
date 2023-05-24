@@ -45,6 +45,8 @@ module.exports = async (client, interaction, version, text, config) => {
         datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
     }
 
+    console.log(datetime)
+
     client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
         .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
