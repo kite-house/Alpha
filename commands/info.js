@@ -18,7 +18,7 @@ module.exports = (client, interaction, config) => {
         },
         {
             name: 'Поддержать бедного разработчика',
-            value: 'https://www.donationalerts.com/r/kite_dev',
+            value: '[КЛИК](https://www.donationalerts.com/r/kite_dev)',
             inline: true
         }
         )
