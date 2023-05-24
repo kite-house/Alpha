@@ -39,7 +39,7 @@ module.exports = async (client, interaction, version, text, config) => {
             .setTimestamp()
     ], ephemeral: true})   
 
-    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')[0].replace(',', '')
+    datetime = date = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'}).split(',')[0]
 
     client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
@@ -56,7 +56,7 @@ module.exports = async (client, interaction, version, text, config) => {
         },
         {
             name: 'Дата обновления',
-            value: datetime,
+            value: date,
             inline: true
         }
         )

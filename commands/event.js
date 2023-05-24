@@ -5,21 +5,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config) => {
     if (!check_permision(client, interaction)) return
 
-    return interaction.reply(
-        {embeds : [new EmbedBuilder()
-            .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-            .setThumbnail(client.user.avatarURL(client.user.avatar))
-            .setColor(Discord.Colors.Red)
-            .setTitle('Возникла ошибка!')
-            .setDescription(`Команда /event временно отключена, в силу бага на сервере!`)
-            .setFooter({
-                iconURL : client.user.avatarURL(client.user.avatar),
-                text: client.user.username
-            })
-            .setTimestamp()
-        ],ephemeral: true 
-    })
-
     if (limited == null){
         limited = 999
     }
@@ -96,7 +81,7 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
     ], components: [row]}).then(message => {
 
         if (date == 'Сегодня'){
-            date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).toString().split(',')[0]
+            date = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'}).split(',')[0]
         }
 
         Create_Events_DB = [
@@ -149,7 +134,7 @@ module.exports.help = {
     .addStringOption(option => 
         option
         .setName("date")
-        .setDescription("Дата проведения мероприятие(оставьте пустым если мероприятие пройдёт сегодня), Месяц/День/Год")
+        .setDescription("Дата проведения мероприятие(оставьте пустым если мероприятие пройдёт сегодня), День.Месяц.Год")
         .setRequired(false)
         .setMinLength(9)
         .setMaxLength(10)
