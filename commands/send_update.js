@@ -26,7 +26,7 @@ module.exports = async (client, interaction, version, text, config) => {
     text = text_edit.toString()
     text = text.replaceAll(",", '')
 
-    await interaction.reply({
+    interaction.reply({
         embeds: [new EmbedBuilder()
             .setColor(Discord.Colors.Green)
             .setTitle("Успешно!")
@@ -49,9 +49,15 @@ module.exports = async (client, interaction, version, text, config) => {
         datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
     }
 
+    console.log(datetime)
+    console.log(version)
+    console.log(text)
 
+    datetime = 'Сегодня'
+    version = '222'
+    text = 'Тест'
     
-    await client.channels.cache.get(interaction.channel.id).send(
+    client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
         .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
         .setThumbnail(client.user.avatarURL(client.user.avatar))
