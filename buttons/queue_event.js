@@ -16,24 +16,15 @@ module.exports = async (client, interaction, db, config) => {
         quantity = results[0].quantity
         limited = results[0].limited
 
-        function datetime(){
-            while (datetime[2] == undefined){
-                datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
-                if (datetime[2]== 'PM'){
-                    hours = parseInt(datetime[1].split(':')[0]) + 12
-                    datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-                }
-                else if (datetime[2] == 'AM'){
-                    hours = parseInt(datetime[1].split(':')[0])
-                    datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-                }
-            }
-            return datetime
+        datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
+        if (datetime[2] == 'PM'){
+            hours = parseInt(datetime[1].split(':')[0]) + 12
+            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
-        
-        datetime = datetime()
-        
-        console.log(datetime)
+        else if (datetime[2] == 'AM'){
+            hours = parseInt(datetime[1].split(':')[0])
+            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+        }
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
@@ -41,8 +32,6 @@ module.exports = async (client, interaction, db, config) => {
             row.components[1] = ButtonBuilder.from(row.components[1]).setDisabled(true)
             interaction.message.edit({ components: [row] });
         }
-
-
 
         number = 0
         for (i in participants.split(', ')){

@@ -5,6 +5,21 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config) => {
     if (!check_permision(client, interaction)) return
 
+    return interaction.editReply(
+        {embeds : [new EmbedBuilder()
+            .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
+            .setThumbnail(client.user.avatarURL(client.user.avatar))
+            .setColor(Discord.Colors.Red)
+            .setTitle('Возникла ошибка!')
+            .setDescription(`Команда /event временно отключена, в силу бага на сервере!`)
+            .setFooter({
+                iconURL : client.user.avatarURL(client.user.avatar),
+                text: client.user.username
+            })
+            .setTimestamp()
+        ],ephemeral: true 
+    })
+
     if (limited == null){
         limited = 999
     }
