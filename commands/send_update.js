@@ -39,22 +39,8 @@ module.exports = async (client, interaction, version, text, config) => {
             .setTimestamp()
     ], ephemeral: true})   
 
-    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')
-    if (datetime[2] == 'PM'){
-        hours = parseInt(datetime[1].split(':')[0]) + 12
-        datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-    }
-    else if (datetime[2] == 'AM'){
-        hours = parseInt(datetime[1].split(':')[0])
-        datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-    }
+    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')[0]
 
-    console.log(datetime)
-    console.log(version)
-    console.log(text)
-
-    datetime = 'Сегодня'
-    
     client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
         .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
