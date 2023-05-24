@@ -5,7 +5,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config) => {
     if (!check_permision(client, interaction)) return
 
-    return interaction.editReply(
+    return interaction.Reply(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
             .setThumbnail(client.user.avatarURL(client.user.avatar))
