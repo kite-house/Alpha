@@ -16,19 +16,20 @@ module.exports = async (client, interaction, db, config) => {
         quantity = results[0].quantity
         limited = results[0].limited
 
-        datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
-        console.log(datetime[1])
-        if (datetime[2] == 'PM'){
-            hours = parseInt(datetime[1].split(':')[0]) + 12
-            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-            console.log('сработало')
+        function datetime(){
+            datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
+            if (datetime[2]== 'PM'){
+                hours = parseInt(datetime[1].split(':')[0]) + 12
+                datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+            }
+            else if (datetime[2] == 'AM'){
+                hours = parseInt(datetime[1].split(':')[0])
+                datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+            }
+            return datetime
         }
-        else if (datetime[2] == 'AM'){
-            hours = parseInt(datetime[1].split(':')[0])
-            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
-        }
-        
-        console.log(datetime)
+
+        datetime = datetime()
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
