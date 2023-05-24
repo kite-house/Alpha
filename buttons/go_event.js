@@ -20,7 +20,10 @@ module.exports = async (client, interaction, db, config) => {
             hours = parseInt(datetime[1].split(':')[0]) + 12
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
-        
+        else if (datetime[2] == 'AM'){
+            hours = parseInt(datetime[1].split(':')[0])
+            datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+        }
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
