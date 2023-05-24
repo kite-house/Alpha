@@ -28,7 +28,7 @@ module.exports = (client, interaction, db, config) => {
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
 
-        console.log(datetime)
+        console.log(datetime[2])
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
