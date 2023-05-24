@@ -30,8 +30,7 @@ require('./module/loader')(client, process.env.SECRET_TOKEN_DISCORD, config)
 // ================= Main Code ===================================
 
 client.on('ready', () => {
-    client.commands.get('database_update')(client, interaction = 'System', db, config)
-    setTimeout(function() {}, 200000)
+    //client.commands.get('database_update')(client, interaction = 'System', db, config)
     console.log('SYSTEM-INFO: DATABASE-MIGRATIONS | STATUS: ACCEPT!')
     client.user.setPresence({
         activities: [{ name: `за тобой`, type: Discord.ActivityType.Watching }],

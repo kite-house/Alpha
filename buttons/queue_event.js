@@ -20,13 +20,15 @@ module.exports = (client, interaction, db, config) => {
         if (datetime[2] == 'PM'){
             hours = parseInt(datetime[1].split(':')[0]) + 12
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
+            console.log("сработал")
+            console.log(datetime)
         }
         else if (datetime[2] == 'AM'){
             hours = parseInt(datetime[1].split(':')[0])
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
 
-        setTimeout(function() {}, 300);
+        console.log(datetime)
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
