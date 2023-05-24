@@ -39,7 +39,7 @@ module.exports = async (client, interaction, version, text, config) => {
             .setTimestamp()
     ], ephemeral: true})   
 
-    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')[0]
+    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')[0].replace(',', '')
 
     client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
