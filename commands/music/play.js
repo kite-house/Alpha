@@ -1,7 +1,6 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
-const EventEmitter = require('events')
 
 module.exports = async (client, interaction, names, config) => {
     if (interaction.channel.id != config.music) return interaction.reply(
