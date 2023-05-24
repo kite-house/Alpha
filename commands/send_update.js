@@ -54,8 +54,6 @@ module.exports = async (client, interaction, version, text, config) => {
     console.log(text)
 
     datetime = 'Сегодня'
-    version = '222'
-    text = 'Тест'
     
     client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
