@@ -17,8 +17,8 @@ module.exports = async (client, interaction, db, config) => {
         limited = results[0].limited
 
         function datetime(){
-            datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
             while (datetime[2] == undefined){
+                datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
                 if (datetime[2]== 'PM'){
                     hours = parseInt(datetime[1].split(':')[0]) + 12
                     datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
