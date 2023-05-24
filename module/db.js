@@ -1,20 +1,12 @@
 const mysql = require('mysql2')
+require('dotenv').config()
 
-module.exports = mysql.createConnection({ 
-    host: 'db4free.net',
-    user: 'admin_bot',
-    database: 'morphy_bot',
-    password: 'PMzBg4Snz3!3hF2'
+module.exports = mysql.createConnection({
+    host: process.env.db_host,
+    user: process.env.db_user,
+    database: process.env.db_database,
+    password: process.env.db_password
 })
-
-
-
-/* {
-    host: '',
-    user: 'admin_bot',
-    database: 'morphy_bot',
-    password: 'PMzBg4Snz3!3hF2',
-} */
 
 // ====================== HELP ==============================
 
