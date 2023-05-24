@@ -55,7 +55,7 @@ module.exports = async (client, interaction, version, text, config) => {
         .addFields(
         {
             name: 'Версия',
-            value: {version},
+            value: version,
             inline: true
         },
         {
@@ -94,5 +94,6 @@ module.exports.help = {
         .setDescription("Текст сообщения")
         .setRequired(true)
         .setMinLength(1)
+        .setMaxLength(255)
         )
 }
