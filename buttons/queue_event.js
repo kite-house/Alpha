@@ -18,6 +18,8 @@ module.exports = (client, interaction, db, config) => {
 
         datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(', ')
         format = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(', ')[1].split(' ')[1]
+        console.log(format)
+        console.log(format == 'PM')
         if (format == 'PM'){
             hours = parseInt(datetime[1].split(':')[0]) + 12
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
