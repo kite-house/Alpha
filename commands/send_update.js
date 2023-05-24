@@ -26,7 +26,7 @@ module.exports = async (client, interaction, version, text, config) => {
     text = text_edit.toString()
     text = text.replaceAll(",", '')
 
-    interaction.reply({
+    await interaction.reply({
         embeds: [new EmbedBuilder()
             .setColor(Discord.Colors.Green)
             .setTitle("Успешно!")
@@ -39,7 +39,7 @@ module.exports = async (client, interaction, version, text, config) => {
             .setTimestamp()
     ], ephemeral: true})   
 
-    datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(' ')
+    datetime = new Date().toLocaleString("en-US", { timeZone: "Europe/Moscow" }).split(' ')
     if (datetime[2] == 'PM'){
         hours = parseInt(datetime[1].split(':')[0]) + 12
         datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
@@ -48,8 +48,10 @@ module.exports = async (client, interaction, version, text, config) => {
         hours = parseInt(datetime[1].split(':')[0])
         datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
     }
+
+
     
-    client.channels.cache.get(interaction.channel.id).send(
+    await client.channels.cache.get(interaction.channel.id).send(
         {embeds : [new EmbedBuilder()
         .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
         .setThumbnail(client.user.avatarURL(client.user.avatar))
