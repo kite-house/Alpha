@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-module.exports = async (client, interaction, db, config) => {
+module.exports = (client, interaction, db, config) => {
 
     id_event = interaction.message.id
 
@@ -24,6 +24,8 @@ module.exports = async (client, interaction, db, config) => {
             hours = parseInt(datetime[1].split(':')[0])
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
+        
+        setTimeout(function() {}, 300);
         
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
