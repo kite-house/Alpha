@@ -5,7 +5,6 @@ const config = require('../config.json')
 module.exports = (client,interaction) => {
     try{
         permission = interaction.member.permissions.has('Administration')
-        //console.log(interaction.member)
     } 
     catch (error) {
         if (error = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: Administration.')
