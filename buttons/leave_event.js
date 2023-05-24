@@ -25,8 +25,6 @@ module.exports = (client, interaction, db, config) => {
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
         
-        setTimeout(function() {}, 300);
-        
         if (datetime >= `${information.split('| ')[1]}, ${time}`){
             row = interaction.message.components[0]
             row.components[0] = ButtonBuilder.from(row.components[0]).setDisabled(true)
