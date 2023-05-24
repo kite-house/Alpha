@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const {ButtonBuilder} = require('discord.js');
 
 
-module.exports = (client, interaction, db, config) => {
+module.exports = async (client, interaction, db, config) => {
     id_event = interaction.message.id
     text = ''
 
@@ -17,15 +17,13 @@ module.exports = (client, interaction, db, config) => {
         limited = results[0].limited
 
         datetime = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(', ')
-        format = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}).split(', ')[1].split(' ')[1]
-        console.log(format)
-        console.log(format == 'PM')
-        if (format == 'PM'){
+        console.log(datetime)
+        if (datetime[2] == 'PM'){
             hours = parseInt(datetime[1].split(':')[0]) + 12
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
             console.log('сработало')
         }
-        else if (format == 'AM'){
+        else if (datetime[2] == 'AM'){
             hours = parseInt(datetime[1].split(':')[0])
             datetime = `${datetime[0]} ${hours}:${datetime[1].split(':')[1]}`
         }
