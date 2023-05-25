@@ -14,22 +14,23 @@ module.exports = (client, datetime, db) => {
     let read_row = new ActionRowBuilder()
     .addComponents(read)
 
-    db.query("SELECT * FROM events WHERE `condition` = 'active'", function(error, results) {
+    db.query("SELECT * FROM events WHERE `status` = 'active'", function(error, results) {
         if(error) return console.log(error)
         if (results == '') return 
+        let status;
 
         for (i in results){
             names = results[i].names
             date = results[i].date
             time = results[i].time
             created = results[i].created
-            condition = results[i].condition
+            status = results[i].status
             id_event = results[i].id_event
             participants = results[i].participants
             time = adjustment(time)
 
             if (datetime >= `${date}, ${time}`){
-                db.query("UPDATE `events` SET `condition`= 'closed' WHERE `id_event` = " + id_event)
+                db.query("UPDATE `events` SET `status`= 'closed' WHERE `id_event` = " + id_event)
                 console.log(`INTERACTION_INFO: END_REGISTRAION_EVENT | INFO: ${id_event} | STATUS: ACCEPT!`)
                 client.channels.cache.get("1109513252825739356").messages.fetch(id_event)
                 .then(message => {

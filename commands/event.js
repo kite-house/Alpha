@@ -98,7 +98,7 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
             ['']
         ]
 
-        db.query("INSERT INTO events(`id_event`, `created`, `condition`, `names`, `date`, `time`, `quantity`, `limited`, `participants`) VALUES (?)", [Create_Events_DB], function(error, results) {
+        db.query("INSERT INTO events(`id_event`, `created`, `status`, `names`, `date`, `time`, `quantity`, `limited`, `participants`) VALUES (?)", [Create_Events_DB], function(error, results) {
             if(error) {client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${error}`);}
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
