@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const {ButtonBuilder} = require('discord.js');
 
 
-module.exports = async (client, interaction, db, config,error_handling) => {
+module.exports = async (client, interaction, db, config, error_handling) => {
     db.query(`SELECT * FROM events WHERE id_event = '${interaction.message.id}'`, function(error, results) {
         if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_QUEUE ${interaction.message.id}, STATUS: ${error}`);
         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_QUEUE ${interaction.message.id}, STATUS: ACCEPT!`)
