@@ -13,6 +13,9 @@ module.exports = async (client, newChannel, config) => {
     if (newChannel.type == 2){
         typeChannel = 'голосовой'
     }
+
+    console.log(`SERVER-INFO: CREATE_NEW_CHANNEL | TYPE: ${newChannel.type} | NAME: ${newChannel.name} | STATUS: ACCEPT!`)
+
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newChannel.guild.iconURL({Dynamic : true}) , name: newChannel.guild.name})

@@ -1,40 +1,35 @@
-const { EmbedBuilder } = require("@discordjs/builders");
-const Discord = require('discord.js')
 const config = require('../config.json')
+const error_handling = require('./error_handling')
 
-module.exports = (client,interaction) => {
-    try{
-        permission = interaction.member.permissions.has('Administration')
-    } 
-    catch (error) {
-        if (error = 'RangeError [BitFieldInvalid]: Invalid bitfield flag or number: Administration.')
-            if(interaction.user.id != config.developerId){
-                permission = false
+module.exports = (client, interaction, post) => {
+    function check_permision(){
+        if (post.indexOf('Owner') != -1){
+            if (interaction.user.id == interaction.member.ownerId){
+                return true
             }
-            else if (interaction.user.id == config.developerId){
-                permission = true
+        }
+        
+        if (post.indexOf('Developer') != -1){
+            if (interaction.user.id == config.developerId){
+                return true
             }
+        }
+
+        if (post.indexOf('Admin') != -1){
+            try{
+                interaction.member.permissions.has('Administration')
+                return true
+            } catch(error){}
+        }
+
+        return false
     }
 
-    if (!permission) {
-        interaction.reply({
-            embeds : [new EmbedBuilder()
-                .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                .setThumbnail(client.user.avatarURL(client.user.avatar))
-                .setColor(Discord.Colors.Red)
-                .setTitle('Возникла ошибка!')
-                .setDescription('Недостаточно прав для использование')
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ], ephemeral: true }
-        )
+    if (!check_permision()) {
+        error_handling(client, interaction, 'CustomError [Permission]: Missing permission')
     return false
     }
-    
-    if(permission) return true
+    return true
 }
 
 // ====================== HELP ==============================

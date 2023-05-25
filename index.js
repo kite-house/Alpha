@@ -5,6 +5,8 @@ const config = require('./config.json')
 const talkedRecently = new Set();
 const db = require('./module/db')
 const check_permision = require('./module/check_permision')
+const error_handling = require('./module/error_handling')
+const end_reg_event = require('./module/end_reg_event')
 const { DisTube } = require('distube')
 
 const client = new Discord.Client({
@@ -25,12 +27,12 @@ client.DisTube = new DisTube(client, {
     emitAddListWhenCreatingQueue: false,
 })
 
-require('./module/loader')(client, process.env.SECRET_TOKEN_DISCORD, config)
+require('./module/loader')(client)
 
 // ================= Main Code ===================================
 
 client.on('ready', () => {
-    client.commands.get('database_update')(client, interaction = 'System', db, config)
+    client.commands.get('database_update')(client, interaction = 'System', db, config, check_permision)
     console.log('SYSTEM-INFO: DATABASE-MIGRATIONS | STATUS: ACCEPT!')
     client.user.setPresence({
         activities: [{ name: `за тобой`, type: Discord.ActivityType.Watching }],
@@ -44,18 +46,7 @@ client.on('ready', () => {
 client.on('interactionCreate', interaction => {
     if(!interaction.isCommand()) return;
     if (talkedRecently.has(interaction.user.id)) {
-        return interaction.reply(
-            {embeds : [new EmbedBuilder()
-                .setTitle(`Возникла ошибка!`)
-                .setColor(Discord.Colors.Red)
-                .setDescription(`Не спешите!`)
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ],ephemeral: true    
-        })
+        return error_handling(client, interaction, 'CustomError [Interaction]: Too frequent use')
     } else {
         talkedRecently.add(interaction.user.id);
         setTimeout(() => {
@@ -63,7 +54,6 @@ client.on('interactionCreate', interaction => {
         }, 5000);
     }
 
-    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName}`)
     if (interaction.commandName === 'ping'){
         client.commands.get('ping')(client, interaction)
     }
@@ -74,73 +64,80 @@ client.on('interactionCreate', interaction => {
     }
 
     if (interaction.commandName === 'database_update'){
-        client.commands.get('database_update')(client, interaction, db, config)
+        client.commands.get('database_update')(client, interaction, db, config, check_permision)
     }
 
     if (interaction.commandName === 'kick'){
         const user = interaction.options.getUser('user')
         const reason = interaction.options.getString('reason')
-        client.commands.get('kick')(client, interaction, user, reason, check_permision)
+        client.commands.get('kick')(client, interaction, user, reason, check_permision, error_handling)
     }
 
     if (interaction.commandName === 'ban'){
         const user = interaction.options.getUser('user')
         const reason = interaction.options.getString('reason')
-        client.commands.get('ban')(client, interaction, user, reason, check_permision)
+        client.commands.get('ban')(client, interaction, user, reason, check_permision, error_handling)
     }
 
     if (interaction.commandName === 'unban'){
         const user = interaction.options.getUser('user')
         const reason = interaction.options.getString('reason')
-        client.commands.get('unban')(client, interaction, user, reason, check_permision)
+        client.commands.get('unban')(client, interaction, user, reason, check_permision, error_handling)
     }
 
     if (interaction.commandName === 'mute'){
         const user = interaction.options.getUser('user')
         const reason = interaction.options.getString('reason')
         const time = interaction.options.getInteger('time')
-        client.commands.get('mute')(client, interaction, user, reason, time, check_permision)
+        client.commands.get('mute')(client, interaction, user, reason, time, check_permision, error_handling)
     }
 
     if (interaction.commandName === 'unmute'){
         const user = interaction.options.getUser('user')
         const reason = interaction.options.getString('reason')
-        client.commands.get('unmute')(client, interaction, user, reason, check_permision)
+        client.commands.get('unmute')(client, interaction, user, reason, check_permision, error_handling)
     }
 
     if (interaction.commandName === 'play'){
         const names = interaction.options.getString('names')
-        client.commands.get('play')(client, interaction, names, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('play')(client, interaction, names, config, error_handling)
     }
 
     if (interaction.commandName === 'stop'){
-        client.commands.get('stop')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('stop')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName === 'resume'){
-        client.commands.get('resume')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('resume')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName === 'pause'){
-        client.commands.get('pause')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('pause')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName === 'skip'){
-        client.commands.get('skip')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('skip')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName === 'queue'){
-        client.commands.get('queue')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('queue')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName == 'back'){
-        client.commands.get('back')(client, interaction, config)
+        return error_handling(client, interaction, 'CustomError [System]: Disabled function')
+        client.commands.get('back')(client, interaction, config, error_handling)
     }
 
     if (interaction.commandName == 'all'){
         const roles = interaction.options.getRole("roles") 
         const text = interaction.options.getString("text")
-        client.commands.get('all')(client, interaction, roles, text, check_permision)
+        client.commands.get('all')(client, interaction, roles, text, check_permision, error_handling)
     }
 
     if (interaction.commandName == 'event'){
@@ -149,7 +146,7 @@ client.on('interactionCreate', interaction => {
         const limited = interaction.options.getInteger("limited")
         const date = interaction.options.getString('date')
         const text = interaction.options.getString('text')
-        client.commands.get('event')(client, interaction, name, time, limited, date, text, check_permision, db, config)
+        client.commands.get('event')(client, interaction, name, time, limited, date, text, check_permision, db, config, error_handling)
     }
 
     if (interaction.commandName == 'info'){
@@ -166,18 +163,7 @@ client.on('interactionCreate', interaction => {
 client.on('interactionCreate', interaction => {
     if(!interaction.isButton()) return;
     if (talkedRecently.has(interaction.user.id)) {
-        return interaction.reply(
-            {embeds : [new EmbedBuilder()
-                .setTitle(`Возникла ошибка!`)
-                .setColor(Discord.Colors.Red)
-                .setDescription(`Не спешите!`)
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ],ephemeral: true    
-        })
+        return error_handling(client, interaction, 'CustomError [Interaction]: Too frequent use')
     } else {
         talkedRecently.add(interaction.user.id);
         setTimeout(() => {
@@ -185,23 +171,20 @@ client.on('interactionCreate', interaction => {
         }, 1000);
     }
 
-    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId}`)
-
     if (interaction.customId == `read_message`){
-        client.channels.cache.get(config.log_read_all).send(`<@${interaction.user.id}> нажал кнопку прочитать!`)
-        interaction.message.delete().catch(error => {error})
+        client.buttons.get('read_message')(client, interaction, config, error_handling)
     } 
 
     if (interaction.customId == 'go_event'){
-        client.buttons.get('go_event')(client, interaction, db, config)
+        client.buttons.get('go_event')(client, interaction, db, config, error_handling)
     }
 
     if (interaction.customId == 'leave_event'){
-        client.buttons.get('leave_event')(client, interaction, db, config)
+        client.buttons.get('leave_event')(client, interaction, db, config, error_handling)
     }
 
     if (interaction.customId == 'queue_event'){
-        client.buttons.get('queue_event')(client, interaction, db, config)
+        client.buttons.get('queue_event')(client, interaction, db, config, error_handling)
     }
 })
 
@@ -211,14 +194,14 @@ client.on('interactionCreate', interaction => {
 
 client.on('messageCreate', message => { 
     if(message.author.bot) return;
-    if(message.content.split(' ')[0] != '<@960267917088411679>') return;
-    message.content = message.content.replace('<@960267917088411679>', '').trim()
+    if(message.content.split(' ')[0] != '<@1111011163384336435>') return;
+    message.content = message.content.replace('<@1111011163384336435>', '').trim()
     message.content = message.content.replace('?', '')
     message.content = message.content.replace('!', '')
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
-    if (message.content == 'привет'){
-        message.reply('привет')
+    if (message.content == 'info'){
+        message.reply('q')
     }
 })
 
@@ -226,19 +209,16 @@ client.on('messageCreate', message => {
 /// =========== Manage Users ===========
 
 client.on('guildMemberUpdate', (oldMember,newMember) => {
-    console.log(`MEMBER-INFO: USER: ${newMember.user.id} UPDATED`)
     client.events.get('guildMemberUpdate')(client,oldMember, newMember, db, config)
     client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(newMember.guild.id).memberCount}`)
 })
 
 client.on('guildMemberAdd', newUser => {
-    console.log(`MEMBER-INFO: USER: ${newUser.user.id} UPDATED`)
     client.events.get('guildMemberAdd')(client, newUser, db, config)
     client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(newUser.guild.id).memberCount}`)
 })
 
 client.on('guildMemberRemove', oldUser => {
-    console.log(`MEMBER-INFO: USER: ${oldUser.user.id} UPDATED`)
     client.events.get('guildMemberRemove')(client,oldUser, db, config)
     client.channels.cache.get(config.members).setName(`Members: ${client.guilds.cache.get(oldUser.guild.id).memberCount}`)
 })
@@ -247,39 +227,39 @@ client.on('guildMemberRemove', oldUser => {
 /// =========== Manage Server ===========
 
 client.on('channelCreate', newChannel => {
-    console.log(`SERVER-INFO: CREATE NEW CHANNEL`)
     client.events.get('channelCreate')(client, newChannel, config)
 })
 
 client.on('channelDelete', oldChannel => {
-    console.log(`SERVER-INFO: DELETE CHANNEL`)
     client.events.get("channelDelete")(client, oldChannel, config)
 })
 
 client.on('channelUpdate', upChannel => {
     if (upChannel.id == config.members) return 
-    console.log(`SERVER-INFO: UPDATE CHANNEL`)
     client.events.get("channelUpdate")(client, upChannel, config)
 })
 
 client.on('roleCreate', newRole => {
-    console.log(`SERVER-INFO: CREATE NEW ROLE`)
     client.events.get("roleCreate")(client, newRole, config)
 })
 
 client.on('roleDelete', oldRole => {
-    console.log(`SERVER-INFO: DELETE ROLE`)
     client.events.get('roleDelete')(client, oldRole, config)
 })
 
 client.on('roleUpdate', upRole => {
-    console.log(`SERVER-INFO: UPDATE ROLE`)
     client.events.get("roleUpdate")(client, upRole, config)
 })
 
 
+var cron = require('node-cron');
+
+task = cron.schedule('* * * * *', () => {
+    datetime = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})
+    end_reg_event(client, datetime, db)
+  });
 
 /// ============================== AUTHORIZATION =====================================
 
-
+task.start()
 client.login(process.env.SECRET_TOKEN_DISCORD)

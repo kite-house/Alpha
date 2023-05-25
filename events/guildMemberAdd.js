@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 
 
 module.exports = (client, newUser, db, config) => {
-    
+    console.log(`MEMBER-INFO: USER: ${newUser.user.id} | INFO: JOINED | STATUS: ACCEPT!`)
     client.channels.cache.get(config.ds_member).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newUser.user.avatarURL(newUser.user.avatar) , name: `${newUser.user.username}#${newUser.user.discriminator}`})
@@ -28,12 +28,12 @@ module.exports = (client, newUser, db, config) => {
             .setTimestamp()
         ]})
     
-    let role = newUser.roles.cache.map(r => r).join(', ')
-    role = role.replace(", @everyone", '')
-    role = '['+ role +']'
+    let roles = newUser.roles.cache.map(r => r).join(', ')
+    roles = roles.replace(", @everyone", '')
+    roles = '['+ roles +']'
 
-    if (role == '[@everyone]'){
-        role = 'None'
+    if (roles == '[@everyone]'){
+        roles = 'None'
     }
 
     if (newUser.user.avatar == null){
@@ -49,11 +49,11 @@ module.exports = (client, newUser, db, config) => {
         [newUser.nickname],
         [newUser.user.username + '#' + newUser.user.discriminator],
         [newUser.user.avatar],
-        [role]
+        [roles]
     ]
 
-    db.query(`INSERT INTO users(discord_id, username, nickname, avatar, role) VALUES (?)`, [NewUser], function(err, results) {
-        if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ${err}`);
+    db.query(`INSERT INTO users(discord_id, username, nickname, avatar, roles) VALUES (?)`, [NewUser], function(error, results) {
+        if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ${error}`);
         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ACCEPT!`)
     })
 

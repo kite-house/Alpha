@@ -2,59 +2,19 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ButtonBuilder } = require('discord.js');
 
-module.exports = (client, interaction, db, config) => {
-    
-    id_event = interaction.message.id
-
-    db.query(`SELECT * FROM events WHERE id_events = '${id_event}'`, function(err, results) {
-        if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ${err}`);
-        client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ACCEPT!`)
-        information = results[0].information
+module.exports = (client, interaction, db, config, error_handling) => {
+    db.query(`SELECT * FROM events WHERE id_event = '${interaction.message.id}'`, function(error, results) {
+        if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${interaction.message.id}, STATUS: ${error}`);
+        client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${interaction.message.id}, STATUS: ACCEPT!`)
+        names = results[0].names
+        date = results[0].date
         participants = results[0].participants
         time = results[0].time
         quantity = results[0].quantity
         limited = results[0].limited
-        
-        datetime = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})
-        
-        if (datetime >= `${information.split('| ')[1]}, ${time}`){
-            row = interaction.message.components[0]
-            row.components[0] = ButtonBuilder.from(row.components[0]).setDisabled(true)
-            row.components[1] = ButtonBuilder.from(row.components[1]).setDisabled(true)
-            interaction.message.edit({ components: [row] });
-            return interaction.reply({
-                embeds: [new EmbedBuilder()
-                    .setColor(Discord.Colors.Red)
-                    .setTitle("Возникла ошибка!")
-                    .setDescription('Вы не успели, регистрация на мероприятие уже закончилась!')
-                    .setFields({
-                        name : "Информация: ",
-                        value : `${information} // Время: ${time}`
-                    })
-                    .setFooter({
-                        iconURL : client.user.avatarURL(client.user.avatar),
-                        text: client.user.username + ' BOT'
-                    })
-                    .setTimestamp()
-            ], ephemeral: true})
-        }
 
         if(participants.split(', ').find(element => element === interaction.user.id) == undefined){
-            return interaction.reply({
-                embeds: [new EmbedBuilder()
-                    .setColor(Discord.Colors.Red)
-                    .setTitle("Возникла ошибка!")
-                    .setDescription('Вы и так не зарегистрированы на меропрятие!')
-                    .setFields({
-                        name : "Информация: ",
-                        value : `${information} // Время: ${time}`
-                    })
-                    .setFooter({
-                        iconURL : client.user.avatarURL(client.user.avatar),
-                        text: client.user.username + ' BOT'
-                    })
-                    .setTimestamp()
-            ], ephemeral: true})
+            return error_handling(client, interaction, 'CustomError [Event]: And so not registered')
         }
         
         quantity = quantity - 1
@@ -66,10 +26,12 @@ module.exports = (client, interaction, db, config) => {
             participants = participants.replace(', ' + interaction.user.id, '')
         }
 
-        db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_events = '${id_event}'`, function(err, results) {
-            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ${err}`);
-            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${id_event}, STATUS: ACCEPT!`)
+        db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_event = '${interaction.message.id}'`, function(error, results) {
+            if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${interaction.message.id}, STATUS: ${error}`);
+            client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_LEAVE ${interaction.message.id}, STATUS: ACCEPT!`)
         })
+
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS: ACCEPT!`)
 
         return interaction.reply({
             embeds: [new EmbedBuilder()
@@ -78,7 +40,7 @@ module.exports = (client, interaction, db, config) => {
                 .setColor(Discord.Colors.Green)
                 .setFields({
                     name : "Информация: ",
-                    value : `${information} // Время: ${time}`
+                    value : `${names} // ${date} // ${time}`
                 })
                 .setFooter({
                     iconURL : client.user.avatarURL(client.user.avatar),

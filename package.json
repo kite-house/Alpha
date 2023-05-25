@@ -6,6 +6,7 @@
     "dotenv": "^16.0.3",
     "ffmpeg-static": "^4.4.1",
     "mysql2": "^3.3.2",
+    "node-cron": "^3.0.2",
     "tweetnacl": "^1.0.3"
   }
 }

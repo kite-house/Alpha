@@ -17,7 +17,7 @@ module.exports = (client, interaction, config) => {
             inline: true
         },
         {
-            name: 'Поддержать бедного разработчика',
+            name: 'Поддержать разработчика',
             value: '[КЛИК](https://www.donationalerts.com/r/kite_dev)',
             inline: true
         }
@@ -30,6 +30,7 @@ module.exports = (client, interaction, config) => {
         
     ], ephemeral: true })
 
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
 }
 
 // ====================== HELP ==============================

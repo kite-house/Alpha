@@ -2,8 +2,8 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
-module.exports = async (client, interaction, roles , text, check_permision) => {
-    if (!check_permision(client, interaction)) return
+module.exports = async (client, interaction, roles , text, check_permision, error_handling) => {
+    if(!check_permision(client, interaction, 'Owner, Developer, Admin')) return
 
     await interaction.deferReply({ephemeral: true});
     const read = new ButtonBuilder()
@@ -31,10 +31,12 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
                         .setTimestamp()
                 ], components: [row]})
 
-            } catch(err){
+            } catch(error){
                 client.users.cache.get(interaction.user.id).send(`Не удалось отправить сообщение пользователю <@${users[i]}>`)
             }
         }
+
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO: ${roles.id} | STATUS: ACCEPT!`)
 
         return interaction.editReply({
             embeds: [new EmbedBuilder()
@@ -53,20 +55,7 @@ module.exports = async (client, interaction, roles , text, check_permision) => {
         ], ephemeral: true})
         
     } catch(error){
-        return interaction.editReply(
-            {embeds : [new EmbedBuilder()
-                .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                .setThumbnail(client.user.avatarURL(client.user.avatar))
-                .setColor(Discord.Colors.Red)
-                .setTitle('Возникла ошибка!')
-                .setDescription(`${error}`)
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ],ephemeral: true 
-        })
+        error_handling(client, interaction, error)
     }
 }
 

@@ -14,6 +14,8 @@ module.exports = async (client, upChannel, config) => {
         typeChannel = 'голосовой'
     }
     
+    console.log(`SERVER-INFO: UPDATE_CHANNEL | TYPE: ${upChannel.type} | NAME: ${upChannel.name} | STATUS: ACCEPT!`)
+
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: upChannel.guild.iconURL({Dynamic : true}) , name: upChannel.guild.name})

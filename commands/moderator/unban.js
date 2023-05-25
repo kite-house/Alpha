@@ -2,8 +2,8 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, user, reason, check_permision) => {
-    if(!check_permision(client, interaction)) return
+module.exports = async (client, interaction, user, reason, check_permision, error_handling) => {
+    if(!check_permision(client, interaction, 'Owner, Developer, Admin')) return
     
     if (reason == null){
         reason = 'не указана'
@@ -11,6 +11,7 @@ module.exports = async (client, interaction, user, reason, check_permision) => {
 
     await interaction.guild.members.unban(user)
         .then(() => {
+            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS: ACCEPT!`)
             interaction.reply(
                 {embeds : [new EmbedBuilder()
                 .setColor(Discord.Colors.Green)
@@ -38,56 +39,7 @@ module.exports = async (client, interaction, user, reason, check_permision) => {
             ], ephemeral: true })
         })
         .catch(error => {
-            if (error == "DiscordAPIError[50013]: Missing Permissions"){
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                        .setThumbnail(client.user.avatarURL(client.user.avatar))
-                        .setColor(Discord.Colors.Red)
-                        .setTitle('Возникла ошибка!')
-                        .setDescription('Недостаточно прав для использование!')
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username
-                        })
-                        .setTimestamp()
-                    ], ephemeral: true }
-                )
-            }
-
-            if (error == "DiscordAPIError[10026]: Unknown Ban"){
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                        .setThumbnail(client.user.avatarURL(client.user.avatar))
-                        .setColor(Discord.Colors.Red)
-                        .setTitle('Возникла ошибка!')
-                        .setDescription('Пользователь не находится в бане!')
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username
-                        })
-                        .setTimestamp()
-                    ], ephemeral: true }
-                )
-            }
-
-            else {
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                        .setThumbnail(client.user.avatarURL(client.user.avatar))
-                        .setColor(Discord.Colors.Red)
-                        .setTitle('Возникла ошибка!')
-                        .setDescription(`${error}`)
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username
-                        })
-                        .setTimestamp()
-                    ], ephemeral: true }
-                )
-            }
+            error_handling(client, interaction, error)
         }
     )
 }

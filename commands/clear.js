@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
 module.exports = (client, interaction, value, check_permision) => {
-    if(!check_permision(client, interaction)) return
+    if(!check_permision(client, interaction, 'Owner, Developer, Admin')) return
     interaction.channel.bulkDelete(value).then(() => {
         interaction.reply(
             {embeds : [new EmbedBuilder()
@@ -11,6 +11,8 @@ module.exports = (client, interaction, value, check_permision) => {
                 .setDescription(`Удалено ${value} сообщений!`)
             ], ephemeral: true })
     });
+    
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
 }
 
 // ====================== HELP ==============================

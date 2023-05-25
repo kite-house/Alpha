@@ -1,15 +1,15 @@
 const Discord = require('discord.js')
 const fs = require('fs')
 
-module.exports = (client, token, config) => {
+module.exports = (client) => {
     client.commands = new Discord.Collection()
     client.events = new Discord.Collection()
     client.buttons = new Discord.Collection()
 
     // ================= Загружаем Commands ============================
 
-    fs.readdir('./commands', (err, files) => {
-        if (err) console.log(err)
+    fs.readdir('./commands', (error, files) => {
+        if (error) console.log(error)
 
         files_moderator = fs.readdirSync('./commands/moderator')
         files_music = fs.readdirSync('./commands/music')
@@ -27,7 +27,7 @@ module.exports = (client, token, config) => {
         jsfile = jsfile + files_music.filter(f => f.split('.').pop() === 'js')
         jsfile = jsfile.split(',')
 
-        if (jsfile.length <= 0) return console.log('ERROR-INFO: COMMANDS NOT FOUND!')
+        if (jsfile.length <= 0) return console.error('ERROR-INFO: COMMANDS NOT FOUND!')
 
         jsfile.forEach((f, i) => {
             let props = require(`../commands/${f}`)
@@ -40,11 +40,11 @@ module.exports = (client, token, config) => {
     
     // ================= Загружаем Events ============================
     
-    fs.readdir('./events', (err, files) => {
-        if (err) console.log(err)
+    fs.readdir('./events', (error, files) => {
+        if (error) console.log(error)
     
         let jsfile = files.filter(f => f.split('.').pop() === 'js')
-        if (jsfile.length <= 0) return console.log('ERROR-INFO: EVENTS NOT FOUND!')
+        if (jsfile.length <= 0) return console.error('ERROR-INFO: EVENTS NOT FOUND!')
     
         console.log(`SYSTEM-INFO: LOADING ${jsfile.length} EVENTS | STATUS: ACCEPT!`)
         jsfile.forEach((f, i) => {
@@ -55,11 +55,11 @@ module.exports = (client, token, config) => {
 
     // ================= Загружаем Buttons ============================
 
-    fs.readdir('./buttons', (err, files) => {
-        if (err) console.log(err)
+    fs.readdir('./buttons', (error, files) => {
+        if (error) console.log(error)
     
         let jsfile = files.filter(f => f.split('.').pop() === 'js')
-        if (jsfile.length <= 0) return console.log('ERROR-INFO: BUTTONS NOT FOUND!')
+        if (jsfile.length <= 0) return console.error('ERROR-INFO: BUTTONS NOT FOUND!')
     
         jsfile.forEach((f, i) => { 
             let props = require(`../buttons/${f}`)

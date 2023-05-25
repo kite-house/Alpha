@@ -3,19 +3,7 @@ const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
 module.exports = async (client, interaction, version, text, config) => {
-    if(interaction.user.id != config.developerId) return interaction.reply({
-        embeds : [new EmbedBuilder()
-            .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-            .setThumbnail(client.user.avatarURL(client.user.avatar))
-            .setColor(Discord.Colors.Red)
-            .setTitle('Возникла ошибка!')
-            .setDescription('Недостаточно прав для использование!')
-            .setFooter({
-                iconURL : client.user.avatarURL(client.user.avatar),
-                text: client.user.username
-            })
-            .setTimestamp()
-        ], ephemeral: true });
+    if(!check_permision(client, interaction, 'Developer')) return
 
     text_edit = text.split(' || ')
 
@@ -68,6 +56,7 @@ module.exports = async (client, interaction, version, text, config) => {
         
     ]})
 
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
 }
 
 // ====================== HELP ==============================

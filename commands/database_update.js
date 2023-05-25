@@ -1,20 +1,8 @@
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, db, config) => {
+module.exports = async (client, interaction, db, config, check_permision) => {
     if (interaction != 'System'){
-        if(interaction.user.id != config.developerId) return interaction.reply({
-            embeds : [new EmbedBuilder()
-                .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                .setThumbnail(client.user.avatarURL(client.user.avatar))
-                .setColor(Discord.Colors.Red)
-                .setTitle('Возникла ошибка!')
-                .setDescription('Недостаточно прав для использование!')
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ], ephemeral: true });
+        if(!check_permision(client, interaction, 'Developer')) return
     }
 
     db.query('DELETE FROM users WHERE 1')
@@ -23,9 +11,9 @@ module.exports = async (client, interaction, db, config) => {
     let res = await guild.members.fetch();
     res.forEach((member) => {
         user = member.user
-        let role = member.roles.cache.map(r => r).join(', ')
-        role = role.replace(", @everyone", '')
-        role = '['+ role +']'
+        let roles = member.roles.cache.map(r => r).join(', ')
+        roles = roles.replace(", @everyone", '')
+        roles = '['+ roles +']'
         if (user.avatar == null){
             user.avatar = 'null'
         }
@@ -39,15 +27,17 @@ module.exports = async (client, interaction, db, config) => {
             [member.nickname],
             [user.username + '#' + user.discriminator],
             [user.avatar],
-            [role]
+            [roles]
         ]
     
-        db.query(`INSERT INTO users(discord_id, nickname, username, avatar, role) VALUES (?)`, [NewUser], function(err, results) {
-            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ${err}!`)
+        db.query(`INSERT INTO users(discord_id, nickname, username, avatar, roles) VALUES (?)`, [NewUser], function(error, results) {
+            if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ${error}!`)
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ACCEPT!`)
         });
     });
 
+    if (interaction != 'System') console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
+    if (interaction == 'System') console.log('SYSTEM-INFO: DATABASE UPDATE | STATUS: ACCEPT!')
 }
 
 // ====================== HELP ==============================

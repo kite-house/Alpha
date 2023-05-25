@@ -2,32 +2,17 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, user, reason, check_permision) => {
-    if(!check_permision(client, interaction)) return
-
+module.exports = async (client, interaction, user, reason, check_permision, error_handling) => {
+    if(!check_permision(client, interaction, 'Owner, Developer, Admin')) return
+    if(interaction.guild.members.cache.get(user.id) == undefined) return error_handling(client, interaction, 'CustomError [Moderator]: The user is not on the server')
+    
     if (reason == null){
         reason = 'не указана'
     }
-
-    if(interaction.guild.members.cache.get(user.id) == undefined){
-        return interaction.reply({
-            embeds: [new EmbedBuilder()
-                .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                .setThumbnail(client.user.avatarURL(client.user.avatar))
-                .setColor(Discord.Colors.Red)
-                .setTitle('Возникла ошибка!')
-                .setDescription('Участник не находится на сервере!')
-                .setFooter({
-                    iconURL : client.user.avatarURL(client.user.avatar),
-                    text: client.user.username
-                })
-                .setTimestamp()
-            ], ephemeral: true }
-        )
-    }
-
+    
     await interaction.guild.members.cache.get(user.id).kick(reason)
         .then(() => {
+            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS: ACCEPT!`)
             interaction.reply(
                 {embeds : [new EmbedBuilder()
                 .setColor(Discord.Colors.Green)
@@ -55,38 +40,7 @@ module.exports = async (client, interaction, user, reason, check_permision) => {
             ], ephemeral: true })
         })
         .catch(error => {
-            if (error == "DiscordAPIError[50013]: Missing Permissions"){
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                        .setThumbnail(client.user.avatarURL(client.user.avatar))
-                        .setColor(Discord.Colors.Red)
-                        .setTitle('Возникла ошибка!')
-                        .setDescription('Недостаточно прав для использование!')
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username
-                        })
-                        .setTimestamp()
-                    ], ephemeral: true }
-                )
-            }
-            else {
-                return interaction.reply({
-                    embeds: [new EmbedBuilder()
-                        .setAuthor({iconURL: client.user.avatarURL(client.user.avatar) , name: `${client.user.username}#${client.user.discriminator}`})
-                        .setThumbnail(client.user.avatarURL(client.user.avatar))
-                        .setColor(Discord.Colors.Red)
-                        .setTitle('Возникла ошибка!')
-                        .setDescription(`${error}`)
-                        .setFooter({
-                            iconURL : client.user.avatarURL(client.user.avatar),
-                            text: client.user.username
-                        })
-                        .setTimestamp()
-                    ], ephemeral: true }
-                )
-            }
+            error_handling(client, interaction, error)
         }
     )
 }

@@ -12,6 +12,9 @@ module.exports = async (client, oldChannel, config) => {
     if (oldChannel.type == 2){
         typeChannel = 'голосовой'
     }
+
+    console.log(`SERVER-INFO: DELETED_CHANNEL | TYPE: ${oldChannel.type} | NAME: ${oldChannel.name} | STATUS: ACCEPT!`)
+
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: oldChannel.guild.iconURL({Dynamic : true}) , name: oldChannel.guild.name})

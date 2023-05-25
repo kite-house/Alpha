@@ -1,9 +1,11 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const event_check_datetime = require('../module/event_check_datetime')
 
-module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config) => {
-    if (!check_permision(client, interaction)) return
+module.exports = (client, interaction, name, time, limited, date, text, check_permision, db, config, error_handling) => {
+    if(!check_permision(client, interaction, 'Owner, Developer, Admin')) return
+    if(!event_check_datetime(date, time)) return error_handling(client, interaction, "CustomError [Event]: Validation error")
 
     if (limited == null){
         limited = 999
@@ -56,14 +58,14 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
     const row = new ActionRowBuilder()
     .addComponents(go_event, leave_event, queue_event)
 
-    
+    /*
     for (let i = 0; i <= 2; i++) {
         client.channels.cache.get(config.reg_event).send("@everyone").then(msg => {
             setTimeout(() => msg.delete(), 3000)
         })
-    } 
+    } */
 
-    client.channels.cache.get(config.reg_event).send({
+    client.channels.cache.get("1109513252825739356").send({ // ПОМЕТКА!
         embeds: [new EmbedBuilder()
             .setColor(Discord.Colors.Green)
             .setTitle("Сбор на мероприятие!")
@@ -87,18 +89,21 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
         Create_Events_DB = [
             [message.id],
             [interaction.user.id],
-            [`${name} | ${date}`],
+            [`active`],
+            [name],
+            [date],
             [time],
             [0],
             [limited],
             ['']
         ]
 
-        db.query(`INSERT INTO events(id_events, created, information, time, quantity, limited, participants) VALUES (?)`, [Create_Events_DB], function(err, results) {
-            if(err) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${err}`);
+        db.query("INSERT INTO events(`id_event`, `created`, `condition`, `names`, `date`, `time`, `quantity`, `limited`, `participants`) VALUES (?)", [Create_Events_DB], function(error, results) {
+            if(error) {client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${error}`);}
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
     })
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
 }
 
 // ====================== HELP ==============================
@@ -120,6 +125,8 @@ module.exports.help = {
         .setName('time')
         .setDescription("Время начало мероприятие (Часы:Минуты)")
         .setRequired(true)
+        .setMinLength(4)
+        .setMaxLength(5)
     )
 
     .addIntegerOption(option => 
