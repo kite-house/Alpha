@@ -156,7 +156,7 @@ client.on('interactionCreate', interaction => {
     if (interaction.commandName == 'send_update'){
         const version = interaction.options.getString('version')
         const text = interaction.options.getString('text')
-        client.commands.get('send_update')(client, interaction, version, text, config)
+        client.commands.get('send_update')(client, interaction, version, text, config, check_permision)
     }
 })
 

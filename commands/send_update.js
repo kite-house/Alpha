@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { SlashCommandBuilder} = require('discord.js');
 
-module.exports = async (client, interaction, version, text, config) => {
+module.exports = async (client, interaction, version, text, config, check_permision) => {
     if(!check_permision(client, interaction, 'Developer')) return
 
     text_edit = text.split(' || ')
