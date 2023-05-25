@@ -63,6 +63,9 @@ module.exports = (client, interaction, error) => {
         error = 'Времено не работает, приносим извинение!'
     }
 
+    if (error == 'Error [ChannelNotCached]: Could not find the channel where this message came from in the cache!'){
+        error = 'Не удалось определить сообщение!'
+    }
 
     if(interaction.type == 2){
         console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: FAIL! | CODE: ${SysError}`)
