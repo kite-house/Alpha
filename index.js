@@ -7,6 +7,7 @@ const db = require('./module/db')
 const check_permision = require('./module/check_permision')
 const error_handling = require('./module/error_handling')
 const end_reg_event = require('./module/end_reg_event')
+const check_parti_event = require('./module/check_parti_event')
 const { DisTube } = require('distube')
 
 const client = new Discord.Client({
@@ -256,6 +257,7 @@ var cron = require('node-cron');
 
 task = cron.schedule('* * * * *', () => {
     datetime = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})
+    check_parti_event(client, datetime, db, config)
     end_reg_event(client, datetime, db, config)
   });
 

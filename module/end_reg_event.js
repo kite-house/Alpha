@@ -1,18 +1,17 @@
 const { EmbedBuilder } = require("@discordjs/builders");
 const Discord = require('discord.js')
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
-require('dotenv').config()
 const adjustment = require('./adjustment')
 
 module.exports = (client, datetime, db, config) => {
     const read = new ButtonBuilder()
-    .setCustomId(`read_message`)
-    .setLabel('Прочитал')
-    .setDisabled(false)
-    .setStyle(ButtonStyle.Secondary);
+        .setCustomId(`read_message`)
+        .setLabel('Прочитал')
+        .setDisabled(false)
+        .setStyle(ButtonStyle.Secondary);
 
     let read_row = new ActionRowBuilder()
-    .addComponents(read)
+        .addComponents(read)
 
     db.query("SELECT * FROM events WHERE `status` = 'active'", function(error, results) {
         if(error) return console.log(error)

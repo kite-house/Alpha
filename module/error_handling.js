@@ -48,7 +48,7 @@ module.exports = (client, interaction, error) => {
     }
 
     if (error == 'CustomError [Event]: Exceeded the limit of participants'){
-        error = 'Превышен лимит участников!'
+        error = 'Превышен лимит участников! Вы были добавлены в очередь.'
     }
 
     if (error == 'CustomError [Interaction]: Too frequent use'){

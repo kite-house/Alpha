@@ -38,25 +38,25 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
 
 
     const go_event = new ButtonBuilder()
-    .setCustomId(`go_event`)
-    .setLabel('Участвовать!')
-    .setDisabled(false)
-    .setStyle(ButtonStyle.Success);
+        .setCustomId(`go_event`)
+        .setLabel('Участвовать!')
+        .setDisabled(false)
+        .setStyle(ButtonStyle.Success);
 
     const leave_event = new ButtonBuilder()
-    .setCustomId(`leave_event`)
-    .setLabel('Отменить участие!')
-    .setDisabled(false)
-    .setStyle(ButtonStyle.Danger);
+        .setCustomId(`leave_event`)
+        .setLabel('Отменить участие!')
+        .setDisabled(false)
+        .setStyle(ButtonStyle.Danger);
 
     const queue_event = new ButtonBuilder()
-    .setCustomId(`queue_event`)
-    .setLabel('Список')
-    .setDisabled(false)
-    .setStyle(ButtonStyle.Secondary);
+        .setCustomId(`queue_event`)
+        .setLabel('Список')
+        .setDisabled(false)
+        .setStyle(ButtonStyle.Secondary);
 
     const row = new ActionRowBuilder()
-    .addComponents(go_event, leave_event, queue_event)
+        .addComponents(go_event, leave_event, queue_event)
 
     
     for (let i = 0; i <= 2; i++) {
@@ -95,10 +95,11 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
             [time],
             [0],
             [limited],
+            [''],
             ['']
         ]
 
-        db.query("INSERT INTO events(`id_event`, `created`, `status`, `names`, `date`, `time`, `quantity`, `limited`, `participants`) VALUES (?)", [Create_Events_DB], function(error, results) {
+        db.query("INSERT INTO events(`id_event`, `created`, `status`, `names`, `date`, `time`, `quantity`, `limited`, `participants`, `reserve`) VALUES (?)", [Create_Events_DB], function(error, results) {
             if(error) {client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ${error}`);}
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
