@@ -8,7 +8,6 @@ module.exports = (client, datetime, db, config) => {
         if (results == '') return 
 
         for (i in results){
-            console.log('тут')
             names = results[i].names
             date = results[i].date
             time = results[i].time
