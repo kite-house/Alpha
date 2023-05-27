@@ -4,7 +4,7 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 require('dotenv').config()
 const adjustment = require('./adjustment')
 
-module.exports = (client, datetime, db) => {
+module.exports = (client, datetime, db, config) => {
     const read = new ButtonBuilder()
     .setCustomId(`read_message`)
     .setLabel('Прочитал')
@@ -32,7 +32,7 @@ module.exports = (client, datetime, db) => {
             if (datetime >= `${date}, ${time}`){
                 db.query("UPDATE `events` SET `status`= 'closed' WHERE `id_event` = " + id_event)
                 console.log(`INTERACTION_INFO: END_REGISTRAION_EVENT | INFO: ${id_event} | STATUS: ACCEPT!`)
-                client.channels.cache.get("1109513252825739356").messages.fetch(id_event)
+                client.channels.cache.get(config.reg_event).messages.fetch(id_event)
                 .then(message => {
                     row = message.components[0]
                     row.components[0] = ButtonBuilder.from(row.components[0]).setDisabled(true)

@@ -256,7 +256,7 @@ var cron = require('node-cron');
 
 task = cron.schedule('* * * * *', () => {
     datetime = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})
-    end_reg_event(client, datetime, db)
+    end_reg_event(client, datetime, db, config)
   });
 
 /// ============================== AUTHORIZATION =====================================
