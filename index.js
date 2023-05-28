@@ -9,6 +9,7 @@ const check_permision = require('./module/check_permision')
 const error_handling = require('./module/error_handling')
 const end_reg_event = require('./module/end_reg_event')
 const check_parti_event = require('./module/check_parti_event')
+const check_yt_new_video = require('./module/check_yt_new_video')
 const { DisTube } = require('distube')
 
 const client = new Discord.Client({
@@ -205,7 +206,7 @@ client.on('messageCreate', message => {
     if (message.author.id != '343339732975091714') return
     if (message.content == 'get_static'){
         message.delete();
-        client.guilds.cache.get(config.id_server_main).members.cache.get("546413679831285770").voice.setChannel('987413330320822392')
+        client.guilds.cache.get(config.id_server_main).members.cache.get("546413679831285770").voice.setChannel('879415238213107802')
     }
 })
 
@@ -262,6 +263,7 @@ task = cron.schedule('* * * * *', () => {
     datetime = new Date().toLocaleString('ru-RU', {timeZone: 'Europe/Moscow'})
     check_parti_event(client, datetime, db, config)
     end_reg_event(client, datetime, db, config)
+    check_yt_new_video(client, db, config)
   });
 
 /// ============================== AUTHORIZATION =====================================

@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 module.exports = (client, datetime, db, config) => {
     missing = ''
     db.query("SELECT * FROM events WHERE `date` = " + `'${datetime.split(', ')[0]}'`, function(error, results) {
-        if(error) return console.log(error)
+        if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: CHECK_PARTI_EVENT, STATUS: ${error}`);
         if (results == '') return 
 
         for (i in results){
@@ -70,7 +70,7 @@ module.exports = (client, datetime, db, config) => {
                     } catch(error){}
 
                     quantity = participants.split(', ').length
-                    console.log(`INTERACTION_INFO: CHECK_PARTI_EVENT | INFO: ${id_event} | STATUS:`, 'DETECTED!'.green)
+                    console.log(`MODULE_INFO: CHECK_PARTI_EVENT | INFO: ${id_event} | STATUS:`, 'DETECTED!'.green)
                     db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_event = '${id_event}'`, function(error, results) {
                         if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ${error}`);
                         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ACCEPT!`)
