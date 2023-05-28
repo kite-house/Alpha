@@ -34,7 +34,7 @@ module.exports = (client) => {
             client.commands.set(props.help.name, props)
         })
 
-        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} COMMANDS | STATUS: ACCEPT!`)
+        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} COMMANDS | STATUS:`, `ACCEPT!`.green)
 
     })
     
@@ -46,7 +46,7 @@ module.exports = (client) => {
         let jsfile = files.filter(f => f.split('.').pop() === 'js')
         if (jsfile.length <= 0) return console.error('ERROR-INFO: EVENTS NOT FOUND!')
     
-        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} EVENTS | STATUS: ACCEPT!`)
+        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} EVENTS | STATUS:`, `ACCEPT!`.green)
         jsfile.forEach((f, i) => {
             let props = require(`../events/${f}`)
             client.events.set(props.help.name, props)
@@ -66,7 +66,7 @@ module.exports = (client) => {
             client.buttons.set(props.help.name, props)
         })
 
-        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} BUTTONS | STATUS: ACCEPT!`)
+        console.log(`SYSTEM-INFO: LOADING ${jsfile.length} BUTTONS | STATUS:`, `ACCEPT!`.green)
     })
     
 }

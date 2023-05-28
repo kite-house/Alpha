@@ -21,7 +21,7 @@ module.exports = async (client, interaction, db, config, error_handling) => {
             text = text + `Номер: ${number}  //  <@${participants.split(', ')[i]}> \n` 
         }
 
-        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS: ACCEPT!`)
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS:`, 'ACCEPT!'.green)
 
         return interaction.reply({
             embeds : [new EmbedBuilder()

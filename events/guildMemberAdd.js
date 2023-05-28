@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 
 
 module.exports = (client, newUser, db, config) => {
-    console.log(`MEMBER-INFO: USER: ${newUser.user.id} | INFO: JOINED | STATUS: ACCEPT!`)
+    console.log(`MEMBER-INFO: USER: ${newUser.user.id} | INFO: JOINED | STATUS:`, 'ACCEPT!'.green)
     client.channels.cache.get(config.ds_member).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newUser.user.avatarURL(newUser.user.avatar) , name: `${newUser.user.username}#${newUser.user.discriminator}`})

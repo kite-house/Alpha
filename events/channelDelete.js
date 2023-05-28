@@ -13,7 +13,7 @@ module.exports = async (client, oldChannel, config) => {
         typeChannel = 'голосовой'
     }
 
-    console.log(`SERVER-INFO: DELETED_CHANNEL | TYPE: ${oldChannel.type} | NAME: ${oldChannel.name} | STATUS: ACCEPT!`)
+    console.log(`SERVER-INFO: DELETED_CHANNEL | TYPE: ${oldChannel.type} | NAME: ${oldChannel.name} | STATUS:`, 'ACCEPT!'.green)
 
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()

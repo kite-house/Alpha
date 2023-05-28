@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 module.exports = async (client, newRole, config) => {
     const AuditLogFetch = await newRole.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
-    console.log(`SERVER-INFO: CREATE_NEW_ROLE | INFO: ${newRole.name} | STATUS: ACCEPT!`)
+    console.log(`SERVER-INFO: CREATE_NEW_ROLE | INFO: ${newRole.name} | STATUS:`, 'ACCEPT!'.green)
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: newRole.guild.iconURL({Dynamic : true}) , name: newRole.guild.name})

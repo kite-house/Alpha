@@ -30,7 +30,7 @@ module.exports = (client, datetime, db, config) => {
 
             if (datetime >= `${date}, ${time}`){
                 db.query("UPDATE `events` SET `status`= 'closed' WHERE `id_event` = " + id_event)
-                console.log(`INTERACTION_INFO: END_REGISTRAION_EVENT | INFO: ${id_event} | STATUS: ACCEPT!`)
+                console.log(`INTERACTION_INFO: END_REGISTRAION_EVENT | INFO: ${id_event} | STATUS:`, 'ACCEPT!'.green)
                 client.channels.cache.get(config.reg_event).messages.fetch(id_event)
                 .then(message => {
                     row = message.components[0]

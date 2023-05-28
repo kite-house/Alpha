@@ -104,7 +104,7 @@ module.exports = (client, interaction, name, time, limited, date, text, check_pe
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT ${message.id}, STATUS: ACCEPT!`)
         })
     })
-    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS:`, 'ACCEPT!'.green)
 }
 
 // ====================== HELP ==============================

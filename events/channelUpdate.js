@@ -14,7 +14,7 @@ module.exports = async (client, upChannel, config) => {
         typeChannel = 'голосовой'
     }
     
-    console.log(`SERVER-INFO: UPDATE_CHANNEL | TYPE: ${upChannel.type} | NAME: ${upChannel.name} | STATUS: ACCEPT!`)
+    console.log(`SERVER-INFO: UPDATE_CHANNEL | TYPE: ${upChannel.type} | NAME: ${upChannel.name} | STATUS:`, 'ACCEPT!'.green)
 
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()

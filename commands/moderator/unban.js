@@ -11,7 +11,7 @@ module.exports = async (client, interaction, user, reason, check_permision, erro
 
     await interaction.guild.members.unban(user)
         .then(() => {
-            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS: ACCEPT!`)
+            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS:`, 'ACCEPT!'.green)
             interaction.reply(
                 {embeds : [new EmbedBuilder()
                 .setColor(Discord.Colors.Green)

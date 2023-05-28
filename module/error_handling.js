@@ -68,11 +68,11 @@ module.exports = (client, interaction, error) => {
     }
 
     if(interaction.type == 2){
-        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: FAIL! | CODE: ${SysError}`)
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: `,'FAIL!'.red,` | CODE: ${SysError}`)
     }
 
     if(interaction.type == 3){
-        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS: FAIL! | CODE: ${SysError}`)
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS: `,'FAIL!'.red,` | CODE: ${SysError}`)
     }
 
 

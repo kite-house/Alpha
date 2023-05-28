@@ -44,7 +44,7 @@ module.exports = (client, interaction, db, config, error_handling) => {
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${interaction.message.id}, STATUS: ACCEPT!`)
         })
 
-        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS: ACCEPT!`)
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.customId} | STATUS:`, 'ACCEPT!'.green)
 
         return interaction.reply({
             embeds: [new EmbedBuilder()

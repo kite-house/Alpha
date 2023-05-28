@@ -36,8 +36,8 @@ module.exports = async (client, interaction, db, config, check_permision) => {
         });
     });
 
-    if (interaction != 'System') console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
-    if (interaction == 'System') console.log('SYSTEM-INFO: DATABASE UPDATE | STATUS: ACCEPT!')
+    if (interaction != 'System') console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS:`, 'ACCEPT!'.green)
+    if (interaction == 'System') console.log('SYSTEM-INFO: DATABASE UPDATE | STATUS:', 'ACCEPT!'.green)
 }
 
 // ====================== HELP ==============================

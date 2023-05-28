@@ -56,7 +56,7 @@ module.exports = async (client, interaction, version, text, config, check_permis
         
     ]})
 
-    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS: ACCEPT!`)
+    console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | STATUS:`, 'ACCEPT!'.green)
 }
 
 // ====================== HELP ==============================

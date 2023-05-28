@@ -70,7 +70,7 @@ module.exports = (client, datetime, db, config) => {
                     } catch(error){}
 
                     quantity = participants.split(', ').length
-                    console.log(`INTERACTION_INFO: CHECK_PARTI_EVENT | INFO: ${id_event} | STATUS: DETECTED!`)
+                    console.log(`INTERACTION_INFO: CHECK_PARTI_EVENT | INFO: ${id_event} | STATUS:`, 'DETECTED!'.green)
                     db.query(`UPDATE events SET participants = '${participants}', quantity = '${quantity}' WHERE id_event = '${id_event}'`, function(error, results) {
                         if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ${error}`);
                         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: EVENT_REG ${id_event}, STATUS: ACCEPT!`)

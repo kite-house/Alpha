@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 module.exports = async (client, oldUser, db, config) => {
     const AuditLogFetch = await oldUser.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
-    console.log(`MEMBER-INFO: USER: ${oldUser.user.id} | INFO: LEAVE | STATUS: ACCEPT!`)
+    console.log(`MEMBER-INFO: USER: ${oldUser.user.id} | INFO: LEAVE | STATUS:`, 'ACCEPT!'.green)
     client.channels.cache.get(config.ds_member).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: oldUser.user.avatarURL(oldUser.user.avatar) , name: `${oldUser.user.username}#${oldUser.user.discriminator}`})

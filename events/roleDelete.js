@@ -4,7 +4,7 @@ const Discord = require('discord.js')
 module.exports = async (client, oldRole, config) => {
     const AuditLogFetch = await oldRole.guild.fetchAuditLogs({limit: 1})
     const Entry = AuditLogFetch.entries.first()
-    console.log(`SERVER-INFO: DELETED_ROLE | INFO: ${oldRole.name} | STATUS: ACCEPT!`)
+    console.log(`SERVER-INFO: DELETED_ROLE | INFO: ${oldRole.name} | STATUS:`, 'ACCEPT!'.green)
     client.channels.cache.get(config.ds_server).send(
         {embeds : [new EmbedBuilder()
             .setAuthor({iconURL: oldRole.guild.iconURL({Dynamic : true}) , name: oldRole.guild.name})

@@ -36,7 +36,7 @@ module.exports = async (client, interaction, roles , text, check_permision, erro
             }
         }
 
-        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO: ${roles.id} | STATUS: ACCEPT!`)
+        console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO: ${roles.id} | STATUS:`, 'ACCEPT!'.green)
 
         return interaction.editReply({
             embeds: [new EmbedBuilder()

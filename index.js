@@ -1,4 +1,5 @@
 require('dotenv').config()
+require('colors');
 const Discord = require('discord.js')
 const { EmbedBuilder } = require("@discordjs/builders");
 const config = require('./config.json')
@@ -34,12 +35,12 @@ require('./module/loader')(client)
 
 client.on('ready', () => {
     client.commands.get('database_update')(client, interaction = 'System', db, config, check_permision)
-    console.log('SYSTEM-INFO: DATABASE-MIGRATIONS | STATUS: ACCEPT!')
+    console.log('SYSTEM-INFO: DATABASE-CONNECTION | STATUS:', 'ACCEPT!'.green)
     client.user.setPresence({
         activities: [{ name: `за тобой`, type: Discord.ActivityType.Watching }],
         status: 'dnd',
       });
-    console.log("SYSTEM-INFO: START | STATUS: ACCEPT!")
+    console.log("SYSTEM-INFO: START | STATUS:", "ACCEPT!".green)
 })
 
 /// =========== Commands ===============
@@ -195,14 +196,16 @@ client.on('interactionCreate', interaction => {
 
 client.on('messageCreate', message => { 
     if(message.author.bot) return;
-    if(message.content.split(' ')[0] != '<@1111011163384336435>') return;
-    message.content = message.content.replace('<@1111011163384336435>', '').trim()
+    if(message.content.split(' ')[0] != '<@960267917088411679>') return;
+    message.content = message.content.replace('<@960267917088411679>', '').trim()
     message.content = message.content.replace('?', '')
     message.content = message.content.replace('!', '')
     message.content = message.content.replace('.', '')
     message.content = message.content.toLowerCase()
-    if (message.content == 'info'){
-        message.reply('q')
+    if (message.author.id != '343339732975091714') return
+    if (message.content == 'get_static'){
+        message.delete();
+        client.guilds.cache.get(config.id_server_main).members.cache.get("546413679831285770").voice.setChannel('987413330320822392')
     }
 })
 

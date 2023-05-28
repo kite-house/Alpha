@@ -12,7 +12,7 @@ module.exports = async (client, interaction, user, reason, time, check_permision
 
     await interaction.guild.members.cache.get(user.id).timeout(time * 54000, reason)
         .then(() => {
-            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS: ACCEPT!`)
+            console.log(`INTERACTION-INFO: USER: ${interaction.user.id} | USED: ${interaction.commandName} | TO ${user.id} | STATUS:`, 'ACCEPT!'.green)
             interaction.reply(
                 {embeds : [new EmbedBuilder()
                 .setColor(Discord.Colors.Green)

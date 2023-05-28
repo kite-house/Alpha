@@ -16,7 +16,7 @@ module.exports = async(client, oldMember, newMember, db, config) => {
     }
 
     if (oldMember.nickname != newMember.nickname){
-        console.log(`MEMBER-INFO: USER: ${newMember.user.id} UPDATED | INFO: UPDATE_NICKNAME | STATUS: ACCEPT!`)
+        console.log(`MEMBER-INFO: USER: ${newMember.user.id} UPDATED | INFO: UPDATE_NICKNAME | STATUS:`, 'ACCEPT!'.green)
         client.channels.cache.get(config.ds_member).send(
             {embeds : [new EmbedBuilder()
                 .setAuthor({iconURL: newMember.user.avatarURL(newMember.user.avatar) , name: `${newMember.user.username}#${newMember.user.discriminator}`})
