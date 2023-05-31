@@ -27,10 +27,12 @@ module.exports = async (client, interaction, db, config, check_permision) => {
             [member.nickname],
             [user.username + '#' + user.discriminator],
             [user.avatar],
-            [roles]
+            [roles],
+            ['000'],
+            ['']
         ]
     
-        db.query(`INSERT INTO users(discord_id, nickname, username, avatar, roles) VALUES (?)`, [NewUser], function(error, results) {
+        db.query(`INSERT INTO users(discord_id, nickname, username, avatar, roles, joined, access) VALUES (?)`, [NewUser], function(error, results) {
             if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ${error}!`)
             client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${member.nickname}, STATUS: ACCEPT!`)
         });

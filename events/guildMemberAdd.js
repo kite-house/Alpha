@@ -49,10 +49,12 @@ module.exports = (client, newUser, db, config) => {
         [newUser.nickname],
         [newUser.user.username + '#' + newUser.user.discriminator],
         [newUser.user.avatar],
-        [roles]
+        [roles],
+        ['000'],
+        ['']
     ]
 
-    db.query(`INSERT INTO users(discord_id, username, nickname, avatar, roles) VALUES (?)`, [NewUser], function(error, results) {
+    db.query(`INSERT INTO users(discord_id, username, nickname, avatar, roles, joined, access) VALUES (?)`, [NewUser], function(error, results) {
         if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ${error}`);
         client.channels.cache.get(config.database).send(`DATABASE MIGRATION: ${newUser.nickname}, STATUS: ACCEPT!`)
     })
