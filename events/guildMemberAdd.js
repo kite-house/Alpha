@@ -50,7 +50,7 @@ module.exports = (client, newUser, db, config) => {
         [newUser.user.username + '#' + newUser.user.discriminator],
         [newUser.user.avatar],
         [roles],
-        ['000'],
+        [new Date(member.joinedTimestamp).toLocaleString().split(', ')[0]],
         ['']
     ]
 

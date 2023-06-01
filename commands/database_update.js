@@ -28,7 +28,7 @@ module.exports = async (client, interaction, db, config, check_permision) => {
             [user.username + '#' + user.discriminator],
             [user.avatar],
             [roles],
-            ['000'],
+            [new Date(member.joinedTimestamp).toLocaleString().split(', ')[0]],
             ['']
         ]
     
