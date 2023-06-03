@@ -29,7 +29,7 @@ module.exports = (client, db, config) => {
                 else if(lastvideo != null){
                     if (lastvideo != data.items[0].id){
                         client.channels.cache.get(config.movie)
-                            .send(`||@everyone||У нашего братишки ${name} вышел новый видос!\nhttps://www.youtube.com/watch?v=${data.items[0].id.replace('yt:video:', '')}`)
+                            .send(`||@everyone|| У нашего братишки ${name} вышел новый видос!\nhttps://www.youtube.com/watch?v=${data.items[0].id.replace('yt:video:', '')}`)
 
                         db.query(`UPDATE media_partners SET lastvideo = '${data.items[0].id}' WHERE channel_id = '${channel_id}'`, function(error, result){
                             if(error) client.channels.cache.get(config.database).send(`DATABASE MIGRATION: YouTube: ${channel_id}, STATUS: ${error}`);
